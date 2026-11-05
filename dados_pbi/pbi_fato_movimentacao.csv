@@ -1,0 +1,201 @@
+﻿data_movimentacao,colaborador_key,gestor_key,tipo_movimentacao,motivo,motivo_codigo,tipo_desligamento,tempo_casa_dias,faixa_tempo_casa,transferencia,suspeita_cadastro_teste,qtd_admissao,qtd_desligamento
+2026-10-05,29000000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,434,1-2 anos,0,0,0,1
+2026-07-05,28900000,100000,Admissão,,,,,,0,0,1,0
+2026-10-07,28900000,100000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,94,3-6 meses,0,0,0,1
+2026-03-14,28100000,100000,Admissão,,,,,,0,0,1,0
+2026-09-26,28100000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,196,6-12 meses,0,0,0,1
+2026-03-18,28000000,100000,Admissão,,,,,,0,0,1,0
+2026-09-16,28000000,100000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,182,6-12 meses,0,0,0,1
+2026-04-24,27100000,100000,Admissão,,,,,,0,0,1,0
+2026-08-12,27100000,100000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,110,3-6 meses,0,0,0,1
+2026-08-18,27000000,100000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,493,1-2 anos,0,0,0,1
+2026-08-23,26900000,100000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,415,1-2 anos,0,0,0,1
+2026-07-12,25900000,100000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,496,1-2 anos,0,0,0,1
+2026-07-13,25800000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,231,6-12 meses,0,0,0,1
+2026-03-11,25700000,100000,Admissão,,,,,,0,0,1,0
+2026-07-26,25700000,100000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,137,3-6 meses,0,0,0,1
+2026-06-07,24500000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,166,3-6 meses,0,0,0,1
+2026-06-12,24400000,100000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,400,1-2 anos,0,0,0,1
+2026-06-12,24300000,100000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,450,1-2 anos,0,0,0,1
+2026-03-13,23100000,100000,Admissão,,,,,,0,0,1,0
+2026-05-23,23100000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,71,0-3 meses,0,0,0,1
+2026-05-12,23000000,100000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,196,6-12 meses,0,0,0,1
+2026-05-25,22900000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,329,6-12 meses,0,0,0,1
+2026-05-09,22800000,100000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,451,1-2 anos,0,0,0,1
+2026-04-22,21800000,100000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,342,6-12 meses,0,0,0,1
+2026-04-20,21700000,100000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,453,1-2 anos,0,0,0,1
+2026-01-18,21600000,100000,Admissão,,,,,,0,0,1,0
+2026-04-20,21600000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,92,3-6 meses,0,0,0,1
+2026-04-11,21500000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,384,1-2 anos,0,0,0,1
+2026-03-18,20600000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,92,3-6 meses,0,0,0,1
+2026-03-16,20500000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,290,6-12 meses,0,0,0,1
+2026-03-25,20400000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,246,6-12 meses,0,0,0,1
+2026-02-23,19600000,100000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,61,0-3 meses,0,0,0,1
+2026-02-09,19500000,100000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,89,0-3 meses,0,0,0,1
+2026-01-15,18800000,100000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,344,6-12 meses,0,0,0,1
+2026-01-26,18700000,100000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,290,6-12 meses,0,0,0,1
+2026-06-18,3600000,100000,Admissão,,,,,,0,0,1,0
+2026-01-03,3500000,100000,Admissão,,,,,,0,0,1,0
+2026-10-20,3400000,100000,Admissão,,,,,,0,0,1,0
+2026-08-21,3300000,100000,Admissão,,,,,,0,0,1,0
+2026-04-16,3200000,100000,Admissão,,,,,,0,0,1,0
+2026-10-19,3100000,100000,Admissão,,,,,,0,0,1,0
+2026-09-18,3000000,100000,Admissão,,,,,,0,0,1,0
+2026-04-14,2900000,100000,Admissão,,,,,,0,0,1,0
+2026-08-04,2800000,100000,Admissão,,,,,,0,0,1,0
+2026-10-16,29100000,200000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,354,6-12 meses,0,0,0,1
+2026-09-05,28200000,200000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,510,1-2 anos,0,0,0,1
+2026-08-19,27200000,200000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,332,6-12 meses,0,0,0,1
+2026-01-26,26100000,200000,Admissão,,,,,,0,0,1,0
+2026-07-15,26100000,200000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,170,3-6 meses,0,0,0,1
+2026-04-05,26000000,200000,Admissão,,,,,,0,0,1,0
+2026-07-17,26000000,200000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,103,3-6 meses,0,0,0,1
+2026-06-12,24700000,200000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,489,1-2 anos,0,0,0,1
+2026-01-08,24600000,200000,Admissão,,,,,,0,0,1,0
+2026-06-08,24600000,200000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,151,3-6 meses,0,0,0,1
+2026-05-12,23300000,200000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,207,6-12 meses,0,0,0,1
+2026-05-24,23200000,200000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,437,1-2 anos,0,0,0,1
+2026-04-08,22000000,200000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,362,6-12 meses,0,0,0,1
+2026-04-11,21900000,200000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,233,6-12 meses,0,0,0,1
+2026-03-14,20800000,200000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,133,3-6 meses,0,0,0,1
+2026-03-18,20700000,200000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,466,1-2 anos,0,0,0,1
+2026-02-14,19700000,200000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,258,6-12 meses,0,0,0,1
+2026-01-19,18900000,200000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,286,6-12 meses,0,0,0,1
+2026-06-07,5800000,200000,Admissão,,,,,,0,0,1,0
+2026-01-07,5700000,200000,Admissão,,,,,,0,0,1,0
+2026-10-02,5600000,200000,Admissão,,,,,,0,0,1,0
+2026-10-21,5500000,200000,Admissão,,,,,,0,0,1,0
+2026-08-03,5400000,200000,Admissão,,,,,,0,0,1,0
+2026-10-15,5300000,200000,Admissão,,,,,,0,0,1,0
+2026-07-24,5200000,200000,Admissão,,,,,,0,0,1,0
+2026-04-07,5100000,200000,Admissão,,,,,,0,0,1,0
+2026-01-29,29200000,300000,Admissão,,,,,,0,0,1,0
+2026-10-10,29200000,300000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,254,6-12 meses,0,0,0,1
+2026-09-27,28300000,300000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,385,1-2 anos,0,0,0,1
+2026-06-21,27300000,300000,Admissão,,,,,,0,0,1,0
+2026-08-10,27300000,300000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,50,0-3 meses,0,0,0,1
+2026-04-05,26200000,300000,Admissão,,,,,,0,0,1,0
+2026-07-13,26200000,300000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,99,3-6 meses,0,0,0,1
+2026-06-19,24800000,300000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,172,3-6 meses,0,0,0,1
+2026-05-06,23400000,300000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,424,1-2 anos,0,0,0,1
+2026-04-08,22100000,300000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,509,1-2 anos,0,0,0,1
+2026-02-22,19800000,300000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,336,6-12 meses,0,0,0,1
+2026-06-19,7400000,300000,Admissão,,,,,,0,0,1,0
+2026-07-22,7300000,300000,Admissão,,,,,,0,0,1,0
+2026-02-24,7200000,300000,Admissão,,,,,,0,0,1,0
+2026-02-07,7100000,300000,Admissão,,,,,,0,0,1,0
+2026-08-03,7000000,300000,Admissão,,,,,,0,0,1,0
+2026-01-16,6900000,300000,Admissão,,,,,,0,0,1,0
+2026-03-28,29300000,400000,Admissão,,,,,,0,0,1,0
+2026-10-11,29300000,400000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,197,6-12 meses,0,0,0,1
+2026-05-05,28500000,400000,Admissão,,,,,,0,0,1,0
+2026-09-10,28500000,400000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,128,3-6 meses,0,0,0,1
+2026-09-14,28400000,400000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,316,6-12 meses,0,0,0,1
+2026-08-08,27500000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,510,1-2 anos,0,0,0,1
+2026-08-23,27400000,400000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,458,1-2 anos,0,0,0,1
+2026-07-13,26400000,400000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,356,6-12 meses,0,0,0,1
+2026-07-19,26300000,400000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,385,1-2 anos,0,0,0,1
+2026-06-20,25100000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,423,1-2 anos,0,0,0,1
+2026-06-06,25000000,400000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,335,6-12 meses,0,0,0,1
+2026-04-28,24900000,400000,Admissão,,,,,,0,0,1,0
+2026-06-20,24900000,400000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,53,0-3 meses,0,0,0,1
+2026-05-25,23700000,400000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,182,6-12 meses,0,0,0,1
+2026-05-27,23600000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,303,6-12 meses,0,0,0,1
+2026-03-16,23500000,400000,Admissão,,,,,,0,0,1,0
+2026-05-16,23500000,400000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,61,0-3 meses,0,0,0,1
+2026-04-18,22300000,400000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,330,6-12 meses,0,0,0,1
+2026-04-10,22200000,400000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,340,6-12 meses,0,0,0,1
+2026-03-16,21000000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,358,6-12 meses,0,0,0,1
+2026-03-11,20900000,400000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,365,6-12 meses,0,0,0,1
+2026-02-25,20000000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,489,1-2 anos,0,0,0,1
+2026-02-22,19900000,400000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,387,1-2 anos,0,0,0,1
+2026-01-16,19100000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,113,3-6 meses,0,0,0,1
+2026-01-09,19000000,400000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,467,1-2 anos,0,0,0,1
+2026-10-21,9900000,400000,Admissão,,,,,,0,0,1,0
+2026-02-14,9800000,400000,Admissão,,,,,,0,0,1,0
+2026-07-03,9700000,400000,Admissão,,,,,,0,0,1,0
+2026-06-06,9600000,400000,Admissão,,,,,,0,0,1,0
+2026-10-14,9500000,400000,Admissão,,,,,,0,0,1,0
+2026-02-13,9400000,400000,Admissão,,,,,,0,0,1,0
+2026-01-12,9300000,400000,Admissão,,,,,,0,0,1,0
+2026-06-16,9200000,400000,Admissão,,,,,,0,0,1,0
+2026-06-01,29400000,500000,Admissão,,,,,,0,0,1,0
+2026-10-23,29400000,500000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,144,3-6 meses,0,0,0,1
+2026-07-26,28600000,500000,Admissão,,,,,,0,0,1,0
+2026-09-18,28600000,500000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,54,0-3 meses,0,0,0,1
+2026-06-11,27600000,500000,Admissão,,,,,,0,0,1,0
+2026-08-23,27600000,500000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,73,0-3 meses,0,0,0,1
+2026-07-20,26500000,500000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,404,1-2 anos,0,0,0,1
+2026-04-20,25200000,500000,Admissão,,,,,,0,0,1,0
+2026-06-12,25200000,500000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,53,0-3 meses,0,0,0,1
+2026-05-24,23900000,500000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,252,6-12 meses,0,0,0,1
+2026-05-20,23800000,500000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,303,6-12 meses,0,0,0,1
+2026-04-27,22400000,500000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,348,6-12 meses,0,0,0,1
+2026-01-17,21100000,500000,Admissão,,,,,,0,0,1,0
+2026-03-23,21100000,500000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,65,0-3 meses,0,0,0,1
+2026-02-20,20100000,500000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,53,0-3 meses,0,0,0,1
+2026-01-06,19200000,500000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,327,6-12 meses,0,0,0,1
+2026-09-23,11700000,500000,Admissão,,,,,,0,0,1,0
+2026-05-21,11600000,500000,Admissão,,,,,,0,0,1,0
+2026-02-10,11500000,500000,Admissão,,,,,,0,0,1,0
+2026-06-11,11400000,500000,Admissão,,,,,,0,0,1,0
+2026-02-11,11300000,500000,Admissão,,,,,,0,0,1,0
+2026-03-18,11200000,500000,Admissão,,,,,,0,0,1,0
+2026-10-17,29500000,600000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,480,1-2 anos,0,0,0,1
+2026-01-31,28700000,600000,Admissão,,,,,,0,0,1,0
+2026-09-09,28700000,600000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,221,6-12 meses,0,0,0,1
+2026-03-22,27700000,600000,Admissão,,,,,,0,0,1,0
+2026-08-10,27700000,600000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,141,3-6 meses,0,0,0,1
+2026-07-24,26600000,600000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,255,6-12 meses,0,0,0,1
+2026-01-10,25300000,600000,Admissão,,,,,,0,0,1,0
+2026-06-22,25300000,600000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,163,3-6 meses,0,0,0,1
+2026-05-18,24000000,600000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,227,6-12 meses,0,0,0,1
+2026-04-05,22500000,600000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,463,1-2 anos,0,0,0,1
+2026-03-07,21200000,600000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,385,1-2 anos,0,0,0,1
+2026-01-15,19300000,600000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,251,6-12 meses,0,0,0,1
+2026-05-07,13900000,600000,Admissão,,,,,,0,0,1,0
+2026-01-21,13800000,600000,Admissão,,,,,,0,0,1,0
+2026-04-09,13700000,600000,Admissão,,,,,,0,0,1,0
+2026-06-18,13600000,600000,Admissão,,,,,,0,0,1,0
+2026-09-03,13500000,600000,Admissão,,,,,,0,0,1,0
+2026-07-03,13400000,600000,Admissão,,,,,,0,0,1,0
+2026-04-23,13300000,600000,Admissão,,,,,,0,0,1,0
+2026-09-08,13200000,600000,Admissão,,,,,,0,0,1,0
+2026-10-27,29600000,700000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,315,6-12 meses,0,0,0,1
+2026-09-17,28800000,700000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,471,1-2 anos,0,0,0,1
+2026-08-17,27800000,700000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,365,6-12 meses,0,0,0,1
+2026-07-16,26700000,700000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,411,1-2 anos,0,0,0,1
+2026-06-08,25400000,700000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,178,3-6 meses,0,0,0,1
+2026-03-30,24100000,700000,Admissão,,,,,,0,0,1,0
+2026-05-18,24100000,700000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,49,0-3 meses,0,0,0,1
+2026-04-07,22600000,700000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,211,6-12 meses,0,0,0,1
+2026-01-29,21300000,700000,Admissão,,,,,,0,0,1,0
+2026-03-26,21300000,700000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,56,0-3 meses,0,0,0,1
+2026-02-23,20200000,700000,Desligamento,Sem justa causa - Reestruturação de rota,DEMISSAO_EMPRESA,Involuntário,387,1-2 anos,0,0,0,1
+2026-01-09,19400000,700000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,319,6-12 meses,0,0,0,1
+2026-03-20,15400000,700000,Admissão,,,,,,0,0,1,0
+2026-09-07,15300000,700000,Admissão,,,,,,0,0,1,0
+2026-05-09,15200000,700000,Admissão,,,,,,0,0,1,0
+2026-03-24,15100000,700000,Admissão,,,,,,0,0,1,0
+2026-09-06,15000000,700000,Admissão,,,,,,0,0,1,0
+2026-07-08,26800000,800000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,394,1-2 anos,0,0,0,1
+2026-06-23,25500000,800000,Desligamento,Pedido de demissão - Inadaptação à escala,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,489,1-2 anos,0,0,0,1
+2026-04-19,22700000,800000,Desligamento,Sem justa causa - Baixa performance,DEMISSAO_EMPRESA,Involuntário,292,6-12 meses,0,0,0,1
+2026-02-25,20300000,800000,Desligamento,Pedido de demissão - Mudança de cidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,215,6-12 meses,0,0,0,1
+2026-06-06,16400000,800000,Admissão,,,,,,0,0,1,0
+2026-06-08,16300000,800000,Admissão,,,,,,0,0,1,0
+2026-09-24,16200000,800000,Admissão,,,,,,0,0,1,0
+2026-09-18,16100000,800000,Admissão,,,,,,0,0,1,0
+2026-05-17,27900000,900000,Admissão,,,,,,0,0,1,0
+2026-08-24,27900000,900000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,99,3-6 meses,0,0,0,1
+2026-05-14,24200000,900000,Desligamento,Término de contrato de experiência,DEMISSAO_EMPRESA,Involuntário,512,1-2 anos,0,0,0,1
+2026-03-05,21400000,900000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,330,6-12 meses,0,0,0,1
+2026-05-14,17700000,900000,Admissão,,,,,,0,0,1,0
+2026-03-13,17600000,900000,Admissão,,,,,,0,0,1,0
+2026-03-17,17500000,900000,Admissão,,,,,,0,0,1,0
+2026-05-20,17400000,900000,Admissão,,,,,,0,0,1,0
+2026-04-06,17300000,900000,Admissão,,,,,,0,0,1,0
+2026-06-06,25600000,1000000,Desligamento,Pedido de demissão - Nova oportunidade,PEDIDO_DEMISSAO_COLABORADOR,Voluntário,515,1-2 anos,0,0,0,1
+2026-07-07,18600000,1000000,Admissão,,,,,,0,0,1,0
+2026-10-18,18500000,1000000,Admissão,,,,,,0,0,1,0
+2026-06-08,18400000,1000000,Admissão,,,,,,0,0,1,0

@@ -1,0 +1,211 @@
+﻿table 'Ponto Diario'
+	lineageTag: e70e298c-9d52-468b-ab8d-788a2dd95008
+
+	column data
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 59f9b0f0-2072-4c20-83ed-68c9c0ec27e6
+		summarizeBy: none
+		sourceColumn: data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 242d5ee1-134d-40d8-982f-405a4bc6a3b7
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 34e80247-7b1a-44b3-b568-59c1e097fbfe
+		summarizeBy: sum
+		sourceColumn: gestor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column previsto_min
+		dataType: int64
+		formatString: 0
+		lineageTag: be37218d-547a-492e-abfc-91ca14716956
+		summarizeBy: sum
+		sourceColumn: previsto_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column trabalhado_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 30f15afa-abae-488f-9357-786433de9968
+		summarizeBy: sum
+		sourceColumn: trabalhado_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column ausencia_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 16d03ccc-3b86-481b-ba2b-eaa59b191af4
+		summarizeBy: sum
+		sourceColumn: ausencia_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column ausencia_liquida_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 796d1752-88cd-4196-ab22-81556306a3aa
+		summarizeBy: sum
+		sourceColumn: ausencia_liquida_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column horas_normais_min
+		dataType: int64
+		formatString: 0
+		lineageTag: b0ff9453-67dc-43cc-974d-d05e9364a6c0
+		summarizeBy: sum
+		sourceColumn: horas_normais_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column excedente_min
+		dataType: int64
+		formatString: 0
+		lineageTag: c7ccebc9-3013-4092-925e-eced6101e5de
+		summarizeBy: sum
+		sourceColumn: excedente_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column excedente_util_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 33e1f484-d900-4f83-99a4-d6c82fbaf986
+		summarizeBy: sum
+		sourceColumn: excedente_util_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column he_paga_min
+		dataType: int64
+		formatString: 0
+		lineageTag: c967b828-89e6-465c-9398-77c08814c664
+		summarizeBy: sum
+		sourceColumn: he_paga_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column he_paga_fonte
+		dataType: string
+		lineageTag: 5366f851-0bc7-462c-b39f-db2d8da7f224
+		summarizeBy: none
+		sourceColumn: he_paga_fonte
+
+		annotation SummarizationSetBy = Automatic
+
+	column domingo_feriado
+		dataType: string
+		lineageTag: 12c4e4ee-9fcb-4893-9e8d-612f6db01ecd
+		summarizeBy: none
+		sourceColumn: domingo_feriado
+
+		annotation SummarizationSetBy = Automatic
+
+	column saldo_dia_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c5b1608-6b4d-4d12-8224-154543f89414
+		summarizeBy: sum
+		sourceColumn: saldo_dia_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column saldo_banco_min
+		dataType: int64
+		formatString: 0
+		lineageTag: 885708c3-d61c-496a-b4ac-4cb14c54429d
+		summarizeBy: sum
+		sourceColumn: saldo_banco_min
+
+		annotation SummarizationSetBy = Automatic
+
+	column ultimo_dia_mes
+		dataType: string
+		lineageTag: f1c4abcc-37ed-472f-834a-901e0f637984
+		summarizeBy: none
+		sourceColumn: ultimo_dia_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_sem_marcacao
+		dataType: string
+		lineageTag: ebca4fb4-c949-427c-bb1e-eccff12738c6
+		summarizeBy: none
+		sourceColumn: dia_sem_marcacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column fonte
+		dataType: string
+		lineageTag: c148ed55-00ba-496e-a186-a308695673dd
+		summarizeBy: none
+		sourceColumn: fonte
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Pessoa (chave durável) da versão do colaborador. Apoio da variação do mês, que soma todas as versões da pessoa.
+	column colaborador_id = LOOKUPVALUE ( Colaborador[colaborador_id], Colaborador[colaborador_key], 'Ponto Diario'[colaborador_key] )
+		isHidden
+		lineageTag: 63c5c340-7dce-4e89-a9a9-b24cbf44cc2f
+		summarizeBy: none
+
+	/// Regra da vw_banco_horas: saldo acumulado só no último dia apurado do mês e só de quem estava ativo no fim do mês (demissão vazia ou depois do fim do mês, limitado a hoje no mês corrente). Fora disso: VAZIO, nunca 0.
+	column saldo_banco_fim_min =
+			IF ( 'Ponto Diario'[ultimo_dia_mes] = "1",
+			    VAR _fimMes = EOMONTH ( 'Ponto Diario'[data], 0 )
+			    VAR _hoje =
+			        MAXX ( FILTER ( ALLNOBLANKROW ( Calendario[data], Calendario[ate_hoje] ), Calendario[ate_hoje] = "1" ), Calendario[data] )
+			    VAR _corte = MIN ( _fimMes, _hoje )
+			    VAR _demissao =
+			        LOOKUPVALUE ( Colaborador[data_demissao], Colaborador[colaborador_key], 'Ponto Diario'[colaborador_key] )
+			    RETURN
+			        IF ( ISBLANK ( _demissao ) || _demissao > _corte, 'Ponto Diario'[saldo_banco_min] )   // sem ELSE = vazio
+			)
+		isHidden
+		lineageTag: 43b33211-cd52-4f85-8014-23c5d797febc
+
+	/// Regra da vw_banco_horas: soma do saldo diário da PESSOA no mês (todas as versões), gravada só na linha do último dia apurado (fica na área/gestor desse dia).
+	column variacao_banco_mes_min =
+			IF ( 'Ponto Diario'[ultimo_dia_mes] = "1",
+			    VAR _id = 'Ponto Diario'[colaborador_id]
+			    VAR _ini = DATE ( YEAR ( 'Ponto Diario'[data] ), MONTH ( 'Ponto Diario'[data] ), 1 )
+			    VAR _fim = EOMONTH ( 'Ponto Diario'[data], 0 )
+			    RETURN
+			        CALCULATE (
+			            SUM ( 'Ponto Diario'[saldo_dia_min] ),
+			            REMOVEFILTERS ( 'Ponto Diario' ),
+			            'Ponto Diario'[colaborador_id] = _id,
+			            'Ponto Diario'[data] >= _ini,
+			            'Ponto Diario'[data] <= _fim
+			        )
+			)
+		isHidden
+		lineageTag: f00d59b7-8716-45e3-b06d-5c96709c0589
+
+	partition 'Ponto Diario' = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_ponto_diario.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"data", type date}, {"colaborador_key", Int64.Type}, {"gestor_key", Int64.Type}, {"previsto_min", Int64.Type}, {"trabalhado_min", Int64.Type}, {"ausencia_min", Int64.Type}, {"ausencia_liquida_min", Int64.Type}, {"horas_normais_min", Int64.Type}, {"excedente_min", Int64.Type}, {"excedente_util_min", Int64.Type}, {"he_paga_min", Int64.Type}, {"he_paga_fonte", type text}, {"domingo_feriado", type text}, {"saldo_dia_min", Int64.Type}, {"saldo_banco_min", Int64.Type}, {"ultimo_dia_mes", type text}, {"dia_sem_marcacao", type text}, {"fonte", type text}}, "en-US")
+				in
+				    TiposAlterados
+

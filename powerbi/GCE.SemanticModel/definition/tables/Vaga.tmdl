@@ -1,0 +1,209 @@
+﻿table Vaga
+	lineageTag: 32ccab5a-711d-4487-99a0-3bc37383abe0
+
+	column vaga_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ef78b50-3371-4a2d-8e96-52da214668d7
+		summarizeBy: sum
+		sourceColumn: vaga_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_abertura
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: b216dd0d-b84d-43c8-a4a5-254e2b82e33b
+		summarizeBy: none
+		sourceColumn: data_abertura
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_fechamento
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 0b9ee5c3-2099-42c9-81cf-bc0727407581
+		summarizeBy: none
+		sourceColumn: data_fechamento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_prazo
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: a53880a9-e26c-4c66-bfa7-437158b5bb35
+		summarizeBy: none
+		sourceColumn: data_prazo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_cancelamento
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 48fe50d9-c58c-4291-8475-97894a05c4a6
+		summarizeBy: none
+		sourceColumn: data_cancelamento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column titulo
+		dataType: string
+		lineageTag: 292bbd7c-7ee3-4488-9415-d34370e53d2a
+		summarizeBy: none
+		sourceColumn: titulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column cargo
+		dataType: string
+		lineageTag: 94a7a8af-7228-4187-b999-7735254e298e
+		summarizeBy: none
+		sourceColumn: cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column publicacao
+		dataType: string
+		lineageTag: 8dea5d08-ba4c-41ee-b29b-78f62722660a
+		summarizeBy: none
+		sourceColumn: publicacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_vaga
+		dataType: string
+		lineageTag: 42acf08a-f71e-4c70-a07b-359da223633a
+		summarizeBy: none
+		sourceColumn: tipo_vaga
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 8b475e08-2f2c-4181-ae58-4729e2f1e300
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column situacao
+		dataType: string
+		lineageTag: 9f7506a4-ca91-4de1-928a-ddc2c755afa3
+		summarizeBy: none
+		sourceColumn: situacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sla_dias
+		dataType: int64
+		formatString: 0
+		lineageTag: b0738716-c933-4501-bed5-dd5388f49c49
+		summarizeBy: sum
+		sourceColumn: sla_dias
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_em_aberto
+		dataType: int64
+		formatString: 0
+		lineageTag: e75c5ca4-c3b1-4288-abba-bb413f3aab15
+		summarizeBy: sum
+		sourceColumn: dias_em_aberto
+
+		annotation SummarizationSetBy = Automatic
+
+	column fechada_no_prazo
+		dataType: string
+		lineageTag: 6c4fc3b2-37a8-403b-bd2c-de670e5a9387
+		summarizeBy: none
+		sourceColumn: fechada_no_prazo
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_posicoes
+		dataType: int64
+		formatString: 0
+		lineageTag: a6b3a84f-398b-4d6d-9b3a-c8d0260d9836
+		summarizeBy: sum
+		sourceColumn: qtd_posicoes
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_posicoes_ocupadas
+		dataType: int64
+		formatString: 0
+		lineageTag: ca78e315-1d2f-48aa-ae4c-6654a97c84a6
+		summarizeBy: sum
+		sourceColumn: qtd_posicoes_ocupadas
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_aberta
+		dataType: int64
+		formatString: 0
+		lineageTag: d74aad2e-527d-473c-99df-4069f4fa7916
+		summarizeBy: sum
+		sourceColumn: qtd_aberta
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_fechada
+		dataType: int64
+		formatString: 0
+		lineageTag: 996f83db-d112-44f5-b98f-27797ac76e1d
+		summarizeBy: sum
+		sourceColumn: qtd_fechada
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_cancelada
+		dataType: int64
+		formatString: 0
+		lineageTag: de43aa24-6c83-4e04-9f18-654086c3fb8b
+		summarizeBy: sum
+		sourceColumn: qtd_cancelada
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: 52055a16-44af-45a6-8fe4-c87f3f6401f9
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: a9c1b5bf-0d52-479a-9fbe-974f91eef01a
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Regra da vw_vaga: data de saída da vaga = fechamento ou, se não houver, cancelamento.
+	column data_saida = COALESCE ( Vaga[data_fechamento], Vaga[data_cancelamento] )
+		isHidden
+		formatString: Short Date
+		lineageTag: 615d42e7-362c-4b5c-9935-514132d40087
+
+	partition Vaga = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_vaga.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"vaga_id", Int64.Type}, {"data_abertura", type date}, {"data_fechamento", type date}, {"data_prazo", type date}, {"data_cancelamento", type date}, {"titulo", type text}, {"cargo", type text}, {"publicacao", type text}, {"tipo_vaga", type text}, {"status", type text}, {"situacao", type text}, {"sla_dias", Int64.Type}, {"dias_em_aberto", Int64.Type}, {"fechada_no_prazo", type text}, {"qtd_posicoes", Int64.Type}, {"qtd_posicoes_ocupadas", Int64.Type}, {"qtd_aberta", Int64.Type}, {"qtd_fechada", Int64.Type}, {"qtd_cancelada", Int64.Type}, {"cidade", type text}, {"uf", type text}}, "en-US")
+				in
+				    TiposAlterados
+
+	annotation PBI_ResultType = Table
+

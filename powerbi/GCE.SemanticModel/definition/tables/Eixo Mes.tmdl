@@ -1,0 +1,31 @@
+/// Eixo dos gráficos mês a mês (desconectado). As medidas 'Série ...' mostram jan até o mês escolhido. Usa Calendario[mes_rotulo].
+table 'Eixo Mes'
+	lineageTag: 05ded362-72c8-44e8-8a03-acfb55e15f51
+
+	column mes_ref
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: a3c03b30-3db2-41a6-a9bb-87061312a143
+		summarizeBy: none
+		sourceColumn: [mes_ref]
+
+	column mes_rotulo
+		dataType: string
+		lineageTag: 48f71e77-5332-4d10-9575-6c56565254ad
+		summarizeBy: none
+		sourceColumn: [mes_rotulo]
+		sortByColumn: mes_ref
+
+	partition 'Eixo Mes' = calculated
+		source =
+				SELECTCOLUMNS (
+				    CALCULATETABLE (
+				        SUMMARIZE ( Calendario, Calendario[mes_ref], Calendario[mes_rotulo] ),
+				        Calendario[data] >= DATE ( 2026, 1, 1 ),
+				        Calendario[ate_hoje] = "1"
+				    ),
+				    "mes_ref", Calendario[mes_ref],
+				    "mes_rotulo", Calendario[mes_rotulo]
+				)
+

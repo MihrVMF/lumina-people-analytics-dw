@@ -1,0 +1,1300 @@
+﻿/// Tabela só de medidas (a coluna x fica oculta).
+table _Medidas
+	lineageTag: a42575b1-bd02-4c17-b4fc-e288720bba89
+
+	/// "Hoje" em São Paulo no momento do refresh das materializadas (Calendario[ate_hoje]).
+	measure Hoje = CALCULATE ( MAX ( Calendario[data] ), REMOVEFILTERS ( Calendario ), Calendario[ate_hoje] = "1" )
+		formatString: dd/mm/yyyy
+		displayFolder: Contexto
+		lineageTag: 9fdf8d2f-bdca-42c8-9642-fc47c6790e32
+
+	/// Último dia com ponto apurado (rodapé e aviso de mês parcial).
+	measure 'Ponto dados até' = CALCULATE ( MAX ( 'Ponto Diario'[data] ), ALL () )
+		formatString: dd/mm/yyyy
+		displayFolder: Contexto
+		lineageTag: 19490f8f-0ea0-4d45-b4d1-5400e08c497f
+
+	/// Mês atual (mês do último dia com ponto). Usado quando nenhum mês está selecionado no Período.
+	measure 'Mês padrão' =
+			VAR _ate = [Ponto dados até]
+			RETURN
+			    DATE ( YEAR ( _ate ), MONTH ( _ate ), 1 )
+		formatString: mmm/yyyy
+		displayFolder: Contexto
+		lineageTag: 337663c7-309d-4f6c-abb1-251520606c0b
+
+	/// 1º dia do mês do slicer (Calendario[mes_rotulo], seleção única). Sem slicer: mês padrão.
+	measure 'Mês selecionado' = IF ( ISFILTERED ( Calendario ), MAX ( Calendario[mes_ref] ), [Mês padrão] )
+		formatString: mmm/yyyy
+		displayFolder: Contexto
+		lineageTag: db121641-3487-4f52-ab84-179bf1353975
+
+	/// "Comparar com": Mês anterior (padrão), Sem comparação ou o mês escolhido.
+	measure 'Mês de comparação' =
+			VAR _opcao = SELECTEDVALUE ( 'Comparar com'[Comparar com], "Mês anterior" )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    SWITCH (
+			        _opcao,
+			        "Mês anterior", EDATE ( _m, -1 ),
+			        "Sem comparação", BLANK (),
+			        SELECTEDVALUE ( 'Comparar com'[mes_ref] )
+			    )
+		formatString: mmm/yyyy
+		displayFolder: Contexto
+		lineageTag: 86cd6024-9499-49e4-992c-f5df316b1b15
+
+	/// "Set/2026".
+	measure 'Mês selecionado (texto)' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( SELECTEDVALUE ( Calendario[mes_rotulo] ), REMOVEFILTERS ( Calendario ), Calendario[data] = _m )
+		displayFolder: Contexto
+		lineageTag: 2a421655-7ac6-478e-89c2-24f76987a2a2
+
+	/// Rótulo do mês de comparação.
+	measure 'Mês de comparação (texto)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _c ),
+			        CALCULATE ( SELECTEDVALUE ( Calendario[mes_rotulo] ), REMOVEFILTERS ( Calendario ), Calendario[data] = _c )
+			    )
+		displayFolder: Contexto
+		lineageTag: c4c722bb-fbd9-4971-aa42-04a8d0ae8924
+
+	/// Aviso do card quando o mês escolhido é o mês corrente (ponto D-1).
+	measure 'Mês parcial (texto)' =
+			VAR _ate = [Ponto dados até]
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF (
+			        YEAR ( _ate ) = YEAR ( _m ) && MONTH ( _ate ) = MONTH ( _m ),
+			        " · mês parcial até " & FORMAT ( _ate, "dd/mm", "pt-BR" )
+			    )
+		displayFolder: Contexto
+		lineageTag: e75d76be-976b-4e3b-9171-e691b8da4498
+
+	/// Rodapé do painel.
+	measure 'Dados atualizados até (texto)' =
+			"Dados atualizados até: ponto " & FORMAT ( [Ponto dados até], "dd/mm/yyyy", "pt-BR" )
+			    & " | Fonte: Sólides (Ponto/DP e Gestão)"
+		displayFolder: Contexto
+		lineageTag: 31586103-4ebb-47fb-99d1-e3dd8962ec38
+
+	/// Desligamentos do período (sem transferência entre empresas). Agendados só contam a partir da data.
+	measure Desligamentos =
+			VAR _hoje = [Hoje]
+			RETURN
+			    CALCULATE (
+			        SUM ( Movimentacao[qtd_desligamento] ),
+			        KEEPFILTERS ( Movimentacao[data_movimentacao] <= _hoje )   // regra da vw_turnover
+			    )
+		formatString: #,##0
+		displayFolder: Turnover
+		lineageTag: f8159dd8-7ebb-4e62-8f0b-3ac90c49813a
+
+	/// Admissões do período (sem transferência). Só até hoje.
+	measure Admissões =
+			VAR _hoje = [Hoje]
+			RETURN
+			    CALCULATE (
+			        SUM ( Movimentacao[qtd_admissao] ),
+			        KEEPFILTERS ( Movimentacao[data_movimentacao] <= _hoje )
+			    )
+		formatString: #,##0
+		displayFolder: Turnover
+		lineageTag: 8ee34e39-ecef-46fc-bd17-37995b2c2296
+
+	/// Deriva de [Desligamentos].
+	measure 'Desligamentos voluntários' = CALCULATE ( [Desligamentos], Movimentacao[tipo_desligamento] = "Voluntário" )
+		formatString: #,##0
+		displayFolder: Turnover
+		lineageTag: a79f9ab9-7c17-48ab-be54-2c682fa92e26
+
+	/// Deriva de [Desligamentos].
+	measure 'Desligamentos involuntários' = CALCULATE ( [Desligamentos], Movimentacao[tipo_desligamento] = "Involuntário" )
+		formatString: #,##0
+		displayFolder: Turnover
+		lineageTag: 18c35e6f-63c1-4b62-8f7c-cc5878779f5f
+
+	/// Pessoa-dia ativa no período (componente do HC médio).
+	measure 'Dias ativos' = SUM ( Headcount[dias_ativos] )
+		formatString: #,##0
+		displayFolder: Turnover\Componentes
+		lineageTag: 0d5d29da-675e-4bf2-ae99-7b64ff881e6a
+
+	/// Soma dos dias do período de cada mês com headcount no filtro (o web app soma MAX(dias_periodo) por mês).
+	measure 'Dias do período' = SUMX ( VALUES ( Headcount[mes_ref] ), CALCULATE ( MAX ( Headcount[dias_periodo] ) ) )
+		formatString: #,##0
+		displayFolder: Turnover\Componentes
+		lineageTag: 1b01ca99-563e-4802-b620-fc03b0c9935a
+
+	/// Média diária de ativos no período.
+	measure 'HC médio' = DIVIDE ( [Dias ativos], [Dias do período] )
+		formatString: #,##0.0
+		displayFolder: Turnover
+		lineageTag: ee53059d-fca6-4a11-a5b5-26f20c1ed267
+
+	/// Desligamentos / HC médio x 100. Com HC e sem desligamento = 0%. Vários meses = acumulado do período.
+	measure 'Turnover %' =
+			VAR _hc = [HC médio]
+			RETURN
+			    IF ( _hc > 0, DIVIDE ( [Desligamentos] + 0, _hc ) * 100 )
+		formatString: #,##0.0"%"
+		displayFolder: Turnover
+		lineageTag: 8bc5ffa6-09f9-48bb-83cf-49c4b20e0361
+
+	/// Jan até o mês escolhido.
+	measure 'Turnover % acumulado no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Turnover %], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0.0"%"
+		displayFolder: Turnover
+		lineageTag: 09ecac57-2a2a-43e0-9ead-f3e708afa4f4
+
+	/// Jan até o mês escolhido.
+	measure 'Desligamentos acumulados no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Desligamentos] + 0, REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Turnover
+		lineageTag: e106cfaf-fa25-4693-bc21-914c2473c10f
+
+	/// Turnover do mês de comparação.
+	measure 'Turnover % (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Turnover %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0.0"%"
+		displayFolder: Turnover
+		lineageTag: 715bdaec-d5ae-4fe6-9982-891491c23e0d
+
+	/// Horas previstas de jornada.
+	measure 'Horas previstas' = DIVIDE ( SUM ( 'Ponto Diario'[previsto_min] ), 60 )
+		formatString: #,##0
+		displayFolder: Absenteísmo
+		lineageTag: a22a0ac7-e8da-4121-9db4-043cd532f063
+
+	/// Saldo negativo do dia (respeita abonos).
+	measure 'Horas ausentes (líquido)' = DIVIDE ( SUM ( 'Ponto Diario'[ausencia_liquida_min] ), 60 )
+		formatString: #,##0
+		displayFolder: Absenteísmo
+		lineageTag: fd24b5d2-d183-49b7-a307-b1b9dd520ec2
+
+	/// Previsto menos trabalhado, quando positivo.
+	measure 'Horas ausentes (bruto)' = DIVIDE ( SUM ( 'Ponto Diario'[ausencia_min] ), 60 )
+		formatString: #,##0
+		displayFolder: Absenteísmo
+		lineageTag: 9e941b15-d7e2-4507-929a-ac17fe3646eb
+
+	/// Valor do card: ausência líquida / previstas x 100.
+	measure 'Absenteísmo %' = DIVIDE ( SUM ( 'Ponto Diario'[ausencia_liquida_min] ), SUM ( 'Ponto Diario'[previsto_min] ) ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: Absenteísmo
+		lineageTag: ad6d1af2-48fb-472b-b430-34e5e9bc5bd3
+
+	/// Ausência bruta / previstas x 100.
+	measure 'Absenteísmo bruto %' = DIVIDE ( SUM ( 'Ponto Diario'[ausencia_min] ), SUM ( 'Ponto Diario'[previsto_min] ) ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: Absenteísmo
+		lineageTag: d69a1cc9-8e6c-4da3-9b69-c9674dfa0f34
+
+	/// Absenteísmo do mês de comparação.
+	measure 'Absenteísmo % (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Absenteísmo %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0.0"%"
+		displayFolder: Absenteísmo
+		lineageTag: 6bffde76-cf32-425a-ac3c-5780b2e84341
+
+	/// Horas de HE 100% paga.
+	measure 'HE horas' = DIVIDE ( SUM ( 'Ponto Diario'[he_paga_min] ), 60 )
+		formatString: #,##0.0
+		displayFolder: HE
+		lineageTag: 6f823f55-7e41-4e17-89ec-3f7513fb87ae
+
+	/// HE / horas normais x 100.
+	measure 'HE %' = DIVIDE ( SUM ( 'Ponto Diario'[he_paga_min] ), SUM ( 'Ponto Diario'[horas_normais_min] ) ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: HE
+		lineageTag: f744a031-f3ea-44c7-aea6-3dce8180639d
+
+	/// Jan até o mês escolhido.
+	measure 'HE horas acumuladas no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [HE horas] + 0, REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: HE
+		lineageTag: 06b6d872-a7ef-4bec-b793-03e6892c7af9
+
+	/// Jan até o mês escolhido.
+	measure 'HE % acumulado no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [HE %], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0.0"%"
+		displayFolder: HE
+		lineageTag: 4840df04-a096-4c07-a353-ddf500cf5343
+
+	/// HE % do mês de comparação.
+	measure 'HE % (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [HE %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0.0"%"
+		displayFolder: HE
+		lineageTag: 2a58d6ff-3a3e-4265-bd89-7654a0785314
+
+	/// Colaboradores com saldo no fim do mês (saldo 0 conta; vazio não).
+	measure 'Banco colaboradores com saldo' = COUNT ( 'Ponto Diario'[saldo_banco_fim_min] )
+		formatString: #,##0
+		displayFolder: Banco de horas
+		lineageTag: 41a22f59-f72d-4f5d-a171-deba144b2a78
+
+	/// Saldo geral no fim do mês.
+	measure 'Banco saldo total (h)' = DIVIDE ( SUM ( 'Ponto Diario'[saldo_banco_fim_min] ), 60 )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 0bf5eeb6-014e-4ed0-ae44-65e5e7be02b7
+
+	/// Valor do card: soma dos saldos / colaboradores com saldo. Sem saldo (antes de 09/2026) = vazio.
+	measure 'Banco saldo médio (h)' = DIVIDE ( SUM ( 'Ponto Diario'[saldo_banco_fim_min] ), [Banco colaboradores com saldo] ) / 60
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 61656da9-415c-41dd-a8a2-8e4cde692840
+
+	/// Soma dos saldos positivos.
+	measure 'Banco saldo positivo (h)' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    ( CALCULATE ( SUM ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] > 0 ) + 0 ) / 60
+			)
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: c56f2d97-6909-4f1c-94bc-ae8072f07918
+
+	/// Soma dos saldos negativos.
+	measure 'Banco saldo negativo (h)' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    ( CALCULATE ( SUM ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] < 0 ) + 0 ) / 60
+			)
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 1bca6a66-5e29-46ce-8cd3-e67109a62022
+
+	/// Quantos com saldo > 0.
+	measure 'Banco colaboradores com saldo positivo' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    CALCULATE ( COUNT ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] > 0 ) + 0
+			)
+		formatString: #,##0
+		displayFolder: Banco de horas
+		lineageTag: a08d1ada-8af5-485e-81f1-6b06d6746fec
+
+	/// Quantos com saldo < 0.
+	measure 'Banco colaboradores com saldo negativo' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    CALCULATE ( COUNT ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] < 0 ) + 0
+			)
+		formatString: #,##0
+		displayFolder: Banco de horas
+		lineageTag: 29b52530-aa2d-4d7f-99b5-64c18fbd5b5f
+
+	/// Saldo positivo / colaboradores com saldo positivo.
+	measure 'Banco saldo médio dos positivos (h)' = DIVIDE ( [Banco saldo positivo (h)], [Banco colaboradores com saldo positivo] )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 6d604617-5b3d-4b51-8b99-253ef6eab76c
+
+	/// Saldo negativo / colaboradores com saldo negativo.
+	measure 'Banco saldo médio dos negativos (h)' = DIVIDE ( [Banco saldo negativo (h)], [Banco colaboradores com saldo negativo] )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 93afc78b-2ccd-48fe-8134-f5d5c817ddb0
+
+	/// Saldo > +40h (2.400 min).
+	measure 'Banco colaboradores acima de +40h' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    CALCULATE ( COUNT ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] > 2400 ) + 0
+			)
+		formatString: #,##0
+		displayFolder: Banco de horas
+		lineageTag: 7ad29c65-f333-4333-9f21-3426b617821b
+
+	/// Saldo < -40h.
+	measure 'Banco colaboradores abaixo de -40h' =
+			IF (
+			    [Banco colaboradores com saldo] > 0,
+			    CALCULATE ( COUNT ( 'Ponto Diario'[saldo_banco_fim_min] ), 'Ponto Diario'[saldo_banco_fim_min] < -2400 ) + 0
+			)
+		formatString: #,##0
+		displayFolder: Banco de horas
+		lineageTag: d738ec1b-5205-450c-829f-93f96026f986
+
+	/// Quanto o banco subiu ou desceu no mês (soma do saldo diário, na versão do último dia).
+	measure 'Banco variação do mês (h)' = DIVIDE ( SUM ( 'Ponto Diario'[variacao_banco_mes_min] ), 60 )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: ae281d95-4e69-43be-9eca-4763cc607403
+
+	/// Saldo médio do mês de comparação.
+	measure 'Banco saldo médio (h) (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Banco saldo médio (h)], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Banco de horas
+		lineageTag: 93fa54df-4213-42cf-95e0-ca4d2a1da064
+
+	/// Vagas fechadas no mês (com SLA).
+	measure 'Vagas fechadas' =
+			CALCULATE (
+			    COUNTROWS ( Vaga ),
+			    USERELATIONSHIP ( Vaga[data_fechamento], Calendario[data] ),
+			    Vaga[qtd_fechada] = 1,
+			    NOT ISBLANK ( Vaga[sla_dias] )
+			) + 0
+		formatString: #,##0
+		displayFolder: Recrutamento
+		lineageTag: eb2cf851-53d7-46e9-8004-9debd8d629c3
+
+	/// Média de dias entre abertura e fechamento das vagas fechadas no mês.
+	measure 'SLA vagas (dias)' =
+			CALCULATE (
+			    AVERAGE ( Vaga[sla_dias] ),
+			    USERELATIONSHIP ( Vaga[data_fechamento], Calendario[data] ),
+			    Vaga[qtd_fechada] = 1
+			)
+		formatString: #,##0" dias"
+		displayFolder: Recrutamento
+		lineageTag: fd50074d-2f49-44ca-995c-794a8fd4d00d
+
+	/// SLA do mês de comparação.
+	measure 'SLA vagas (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [SLA vagas (dias)], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0" dias"
+		displayFolder: Recrutamento
+		lineageTag: dc4c4f69-e797-4cde-9b9f-6d940c27e941
+
+	/// Tabela "SLA por tipo de vaga" (ano até o mês).
+	measure 'Vagas fechadas no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Vagas fechadas], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Recrutamento
+		lineageTag: 4dbd2ab8-745c-43bd-9790-0b66725db9b1
+
+	/// SLA de jan até o mês.
+	measure 'SLA vagas no ano (dias)' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [SLA vagas (dias)], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0" dias"
+		displayFolder: Recrutamento
+		lineageTag: 80efdb43-8841-4594-ab94-0cc5e579b245
+
+	/// Abertas até o fim do mês e sem saída (fechamento/cancelamento) até essa data.
+	measure 'Vagas abertas no fim do mês' =
+			VAR _m = [Mês selecionado]
+			VAR _fim = MIN ( EOMONTH ( _m, 0 ), [Hoje] )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( Vaga ),
+			        REMOVEFILTERS ( Calendario ),
+			        FILTER ( ALL ( Vaga[data_abertura] ), NOT ISBLANK ( Vaga[data_abertura] ) && Vaga[data_abertura] <= _fim ),
+			        FILTER ( ALL ( Vaga[data_saida] ), ISBLANK ( Vaga[data_saida] ) || Vaga[data_saida] > _fim )
+			    ) + 0
+		formatString: #,##0
+		displayFolder: Recrutamento
+		lineageTag: e78a3799-6f30-489c-adc2-4c30432e7f29
+
+	/// Abertas no fim do mês com prazo (data_prazo) anterior ao fim do mês.
+	measure 'Vagas fora do prazo' =
+			VAR _m = [Mês selecionado]
+			VAR _fim = MIN ( EOMONTH ( _m, 0 ), [Hoje] )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( Vaga ),
+			        REMOVEFILTERS ( Calendario ),
+			        FILTER ( ALL ( Vaga[data_abertura] ), NOT ISBLANK ( Vaga[data_abertura] ) && Vaga[data_abertura] <= _fim ),
+			        FILTER ( ALL ( Vaga[data_saida] ), ISBLANK ( Vaga[data_saida] ) || Vaga[data_saida] > _fim ),
+			        FILTER ( ALL ( Vaga[data_prazo] ), NOT ISBLANK ( Vaga[data_prazo] ) && Vaga[data_prazo] < _fim )
+			    ) + 0
+		formatString: #,##0
+		displayFolder: Recrutamento
+		lineageTag: 48deb1ea-f9f7-4baf-9b8a-746e2caa03de
+
+	/// Lista de vagas (1 linha por vaga): fim do mês - abertura.
+	measure 'Vaga dias em aberto' =
+			VAR _m = [Mês selecionado]
+			VAR _fim = MIN ( EOMONTH ( _m, 0 ), [Hoje] )
+			VAR _ab = SELECTEDVALUE ( Vaga[data_abertura] )
+			RETURN
+			    IF ( HASONEVALUE ( Vaga[vaga_id] ) && [Vagas abertas no fim do mês] = 1, DATEDIFF ( _ab, _fim, DAY ) )
+		formatString: #,##0
+		displayFolder: Recrutamento
+		lineageTag: 26352275-335f-4d6c-86e7-dae3f4654261
+
+	/// Coluna "Situação" da lista de vagas.
+	measure 'Vaga situação (texto)' =
+			IF (
+			    HASONEVALUE ( Vaga[vaga_id] ) && [Vagas abertas no fim do mês] = 1,
+			    IF ( [Vagas fora do prazo] = 1, "Fora do prazo", "No prazo" )
+			)
+		displayFolder: Recrutamento
+		lineageTag: 382b8142-d12f-4008-ae03-1a16fe6c56c7
+
+	/// Base: ocorrências com data válida, desde 01/2026 (início da série da vw_ocorrencia_colaborador_mes).
+	measure Ocorrências =
+			CALCULATE (
+			    SUM ( Ocorrencia[qtd] ),
+			    KEEPFILTERS ( Ocorrencia[data_valida] = "1" ),                  // 8 datas inválidas ficam fora
+			    KEEPFILTERS ( Ocorrencia[data_ocorrencia] >= DATE ( 2026, 1, 1 ) )  // início da série
+			)
+		formatString: #,##0
+		displayFolder: Ocorrências
+		lineageTag: dc08ddce-becf-4c0e-baac-d682df11369e
+
+	/// Feedbacks no período.
+	measure Feedbacks = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[grupo] = "Feedback" )
+		formatString: #,##0
+		displayFolder: Feedback
+		lineageTag: 45b6879d-158f-4e89-be7b-1327f4cc26bf
+
+	/// Tipo Positivo.
+	measure 'Feedbacks positivos' = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_feedback] = "Positivo" )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: 76dac5be-b582-40b3-a5cd-78d202bc2303
+
+	/// Tipo Neutro.
+	measure 'Feedbacks neutros' = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_feedback] = "Neutro" )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: 3e1deaa7-10c3-41c2-8f4d-5011315096a7
+
+	/// No dado: tipo_feedback = 'Para melhorar'.
+	measure 'Feedbacks oportunidade de melhoria' = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_feedback] = "Para melhorar" )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: c0a0f6af-7099-4f2d-8000-ee2d001a44a4
+
+	/// Distribuição por tipo (use com 'Tipo Ocorrencia'[tipo_feedback_exibicao]). Base = os 3 tipos.
+	measure '% do tipo de feedback' =
+			DIVIDE (
+			    [Feedbacks],
+			    CALCULATE (
+			        [Feedbacks],
+			        REMOVEFILTERS ( 'Tipo Ocorrencia' ),
+			        'Tipo Ocorrencia'[tipo_feedback] IN { "Positivo", "Neutro", "Para melhorar" }
+			    )
+			) * 100
+		formatString: #,##0.0"%"
+		displayFolder: Feedback\Por tipo
+		lineageTag: 86b1fceb-4eed-446a-bc51-1f1a29ef64fe
+
+	/// Colaboradores no headcount (ativos >= 1 dia no mês). Use no contexto de um mês.
+	measure Equipe = COUNTROWS ( Headcount )
+		formatString: #,##0
+		displayFolder: Feedback
+		lineageTag: 0c153260-ff77-465d-a9bf-8d8a744fafde
+
+	/// Da equipe, quantos receberam >= 1 feedback no mês (coluna calculada Headcount[recebeu_feedback]).
+	measure 'Colaboradores com feedback' = SUM ( Headcount[recebeu_feedback] )
+		formatString: #,##0
+		displayFolder: Feedback
+		lineageTag: a9e36b59-0fc2-4fc1-8612-f0fb7db13e8f
+
+	/// Valor do card.
+	measure 'Cobertura de feedback %' = DIVIDE ( [Colaboradores com feedback], [Equipe] ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: Feedback
+		lineageTag: e701dc01-5fd9-405d-b0bc-d3ffac320e91
+
+	/// Cobertura do mês de comparação.
+	measure 'Cobertura de feedback % (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Cobertura de feedback %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0.0"%"
+		displayFolder: Feedback
+		lineageTag: 3718cdeb-e00d-413c-b933-9b0c55678b06
+
+	/// Feedbacks do mês de comparação.
+	measure 'Feedbacks (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Feedbacks] + 0, REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0
+		displayFolder: Feedback
+		lineageTag: df1cef32-a628-41eb-b7bd-ff7c47e5aed2
+
+	/// Jan até o mês escolhido.
+	measure 'Feedbacks acumulados no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Feedbacks], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Feedback
+		lineageTag: bf3f69d8-2f17-46b9-8a27-b6273b9ddacc
+
+	/// Jan até o mês escolhido.
+	measure 'Feedbacks positivos no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Feedbacks positivos], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: b87ed3d2-16a7-4863-8247-610f43638ef4
+
+	/// Jan até o mês escolhido.
+	measure 'Feedbacks neutros no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Feedbacks neutros], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: 486f6c55-37b3-4132-b81f-c63c8cac848c
+
+	/// Jan até o mês escolhido.
+	measure 'Feedbacks oportunidade de melhoria no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Feedbacks oportunidade de melhoria], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Feedback\Por tipo
+		lineageTag: 3c1a83e6-6a24-4643-8a35-dbbe6d176a89
+
+	/// Jan até o mês escolhido.
+	measure '% do tipo de feedback no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [% do tipo de feedback], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0.0"%"
+		displayFolder: Feedback\Por tipo
+		lineageTag: 3c524f88-dbcc-42e5-8095-c21e16637c85
+
+	/// Medidas no período.
+	measure 'Medidas disciplinares' = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[grupo] = "Medida disciplinar" )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: 85580431-8392-4436-bf6f-9ef6a491bf4b
+
+	/// Igual à anterior, mas 0 (e não vazio) quando há equipe ou ocorrência no filtro, como no web app.
+	measure 'Medidas disciplinares (card)' =
+			VAR _x = [Medidas disciplinares]
+			RETURN
+			    IF ( ISBLANK ( _x ) && ( NOT ISEMPTY ( Headcount ) || NOT ISBLANK ( [Ocorrências] ) ), 0, _x )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: e77bd674-a6f8-4661-bc95-2d5f19e24709
+
+	/// Tipo Advertência.
+	measure Advertências = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_medida] = "Advertência" )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: 5095db26-9098-4348-92db-906898ac636c
+
+	/// Tipo Suspensão.
+	measure Suspensões = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_medida] = "Suspensão" )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: 408b82dd-bdf4-468c-bcdf-d54d8cc0d0f7
+
+	/// Outra ocorrência 'Negativo'.
+	measure 'Medidas outros' = CALCULATE ( [Ocorrências], 'Tipo Ocorrencia'[tipo_medida] = "Outros" )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: a0bf9200-1ab7-41c6-978b-66ae5fb3eafb
+
+	/// Distribuição (use com 'Tipo Ocorrencia'[tipo_medida]).
+	measure '% do tipo de medida' = DIVIDE ( [Medidas disciplinares], CALCULATE ( [Medidas disciplinares], REMOVEFILTERS ( 'Tipo Ocorrencia' ) ) ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: Medidas\Por tipo
+		lineageTag: 4eb89dcc-89d5-4bf6-b2a5-080b20065fc7
+
+	/// Pessoas (colaborador_id) com >= 1 medida no período.
+	measure 'Colaboradores envolvidos' = COUNTROWS ( FILTER ( VALUES ( Ocorrencia[colaborador_id] ), [Medidas disciplinares] > 0 ) )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: 7fab1cac-4421-44ff-9dea-f9337f48b451
+
+	/// Recorrência no período do contexto (no card: no mês).
+	measure 'Colaboradores com mais de 1 medida' = COUNTROWS ( FILTER ( VALUES ( Ocorrencia[colaborador_id] ), [Medidas disciplinares] > 1 ) )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: d4013ac1-3d95-4b97-a26d-50410c65066f
+
+	/// Jan até o mês escolhido.
+	measure 'Medidas acumuladas no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Medidas disciplinares], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: e5df3b91-c1ad-48a1-a729-1ce47559b7b1
+
+	/// Jan até o mês escolhido.
+	measure 'Colaboradores envolvidos no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Colaboradores envolvidos], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: 51c68f69-b9f0-4b1f-b6d9-7f29b8c2b85a
+
+	/// Pessoas com mais de 1 medida de jan até o mês.
+	measure 'Recorrência no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Colaboradores com mais de 1 medida], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: e3c289e0-1c9c-4bd4-96fb-1818b3b3226f
+
+	/// Jan até o mês escolhido.
+	measure 'Advertências no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Advertências], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: 2e605950-0a11-4c5f-9567-c880c798dcb8
+
+	/// Jan até o mês escolhido.
+	measure 'Suspensões no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Suspensões], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: 96e86f5d-7a36-43e4-bd03-010fbcd7d0ea
+
+	/// Jan até o mês escolhido.
+	measure 'Medidas outros no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [Medidas outros], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0
+		displayFolder: Medidas\Por tipo
+		lineageTag: 2fc80788-e537-4319-974d-e7774b027f34
+
+	/// Jan até o mês escolhido.
+	measure '% do tipo de medida no ano' =
+			VAR _m = [Mês selecionado]
+			RETURN
+			    CALCULATE ( [% do tipo de medida], REMOVEFILTERS ( Calendario ), Calendario[ano] = YEAR ( _m ), Calendario[mes_ref] <= _m )
+		formatString: #,##0.0"%"
+		displayFolder: Medidas\Por tipo
+		lineageTag: 587e49ca-911a-43ae-b14c-2ede420270d7
+
+	/// Medidas do mês de comparação.
+	measure 'Medidas disciplinares (comparação)' =
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _c ), CALCULATE ( [Medidas disciplinares (card)], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+		formatString: #,##0
+		displayFolder: Medidas
+		lineageTag: e403fe07-2639-45db-9aa4-9803bc47e054
+
+	/// Base (qualquer ciclo trimestral no contexto).
+	measure 'AVD finalizadas' = CALCULATE ( SUM ( Avaliacao[qtd_respondida] ), 'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral" )
+		formatString: #,##0
+		displayFolder: AVD\Componentes
+		lineageTag: f31e6f58-917d-4a46-a267-f0f8b74e1b9b
+
+	/// Base (qualquer ciclo trimestral no contexto).
+	measure 'AVD avaliações' = CALCULATE ( SUM ( Avaliacao[qtd_avaliacao] ), 'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral" )
+		formatString: #,##0
+		displayFolder: AVD\Componentes
+		lineageTag: ec19cabe-7eb5-4637-a5d8-50ab0551c82b
+
+	/// Ciclo trimestral com avaliação vigente no mês escolhido.
+	measure 'AVD ciclo vigente (chave)' =
+			VAR _m = [Mês selecionado]
+			VAR _ciclos =
+			    FILTER (
+			        ALL ( 'Ciclo AVD' ),
+			        'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral"
+			            && 'Ciclo AVD'[tem_avaliacao] = TRUE ()
+			            && 'Ciclo AVD'[vigente_de] <= _m
+			            && 'Ciclo AVD'[vigente_ate] >= _m
+			    )
+			RETURN
+			    MAXX ( TOPN ( 1, _ciclos, 'Ciclo AVD'[ciclo_ordem], DESC ), 'Ciclo AVD'[ciclo_key] )
+		formatString: 0
+		displayFolder: AVD\Componentes
+		lineageTag: 853088d9-93b1-4d84-8bc7-b2f73fec6da4
+
+	/// Ciclo trimestral anterior ao vigente.
+	measure 'AVD ciclo anterior (chave)' =
+			VAR _k = [AVD ciclo vigente (chave)]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _k ),
+			        CALCULATE ( MAX ( 'Ciclo AVD'[ciclo_anterior_key] ), REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k )
+			    )
+		formatString: 0
+		displayFolder: AVD\Componentes
+		lineageTag: bb2793dc-b941-468f-9ba0-b042418c2a8b
+
+	/// Finalizadas no ciclo vigente.
+	measure 'AVD finalizadas (ciclo)' =
+			VAR _k = [AVD ciclo vigente (chave)]
+			RETURN
+			    IF ( NOT ISBLANK ( _k ), CALCULATE ( [AVD finalizadas], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k ) )
+		formatString: #,##0
+		displayFolder: AVD
+		lineageTag: 23e3083a-d858-49f3-a092-decd5e744b45
+
+	/// Avaliações do ciclo vigente.
+	measure 'AVD avaliações (ciclo)' =
+			VAR _k = [AVD ciclo vigente (chave)]
+			RETURN
+			    IF ( NOT ISBLANK ( _k ), CALCULATE ( [AVD avaliações], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k ) )
+		formatString: #,##0
+		displayFolder: AVD
+		lineageTag: 32d43613-7a57-4fc4-8623-a967ae08f8b8
+
+	/// Avaliações - finalizadas no ciclo vigente.
+	measure 'AVD pendentes (ciclo)' = [AVD avaliações (ciclo)] - [AVD finalizadas (ciclo)]
+		formatString: #,##0
+		displayFolder: AVD
+		lineageTag: 5e98624c-a5e6-4278-9d54-ba23f44b073f
+
+	/// Valor do card. Também é a "Conclusão por gestor" quando a linha é Avaliador[avaliador_nome].
+	measure 'AVD % concluídas' = DIVIDE ( [AVD finalizadas (ciclo)], [AVD avaliações (ciclo)] ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: AVD
+		lineageTag: ee0e3734-302d-4955-910d-34787dc8a84b
+
+	/// Comparação do card de AVD.
+	measure 'AVD % concluídas (ciclo anterior)' =
+			VAR _ka = [AVD ciclo anterior (chave)]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _ka ),
+			        DIVIDE (
+			            CALCULATE ( [AVD finalizadas], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _ka ),
+			            CALCULATE ( [AVD avaliações], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _ka )
+			        ) * 100
+			    )
+		formatString: #,##0.0"%"
+		displayFolder: AVD
+		lineageTag: 89c53802-1f51-4327-95b3-918f12c650c8
+
+	/// Nome do ciclo vigente.
+	measure 'AVD ciclo (nome)' =
+			VAR _k = [AVD ciclo vigente (chave)]
+			RETURN
+			    CALCULATE ( SELECTEDVALUE ( 'Ciclo AVD'[ciclo] ), REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k )
+		displayFolder: AVD
+		lineageTag: e1e423a5-583c-4d15-8c5f-ba6a6329763a
+
+	/// "119 / 121 avaliações · ciclo de 08/09/2026 a 08/10/2026".
+	measure 'AVD ciclo (texto)' =
+			VAR _k = [AVD ciclo vigente (chave)]
+			VAR _ini = CALCULATE ( MAX ( 'Ciclo AVD'[data_inicio] ), REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k )
+			VAR _fim = CALCULATE ( MAX ( 'Ciclo AVD'[data_fim] ), REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[ciclo_key] = _k )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( [AVD avaliações (ciclo)] ),
+			        FORMAT ( [AVD finalizadas (ciclo)], "#,##0", "pt-BR" ) & " / " & FORMAT ( [AVD avaliações (ciclo)], "#,##0", "pt-BR" )
+			            & " avaliações · ciclo de " & FORMAT ( _ini, "dd/mm/yyyy", "pt-BR" ) & " a " & FORMAT ( _fim, "dd/mm/yyyy", "pt-BR" ),
+			        "Nenhum ciclo trimestral vigente no período."
+			    )
+		displayFolder: AVD
+		lineageTag: a3dbc918-1b4d-48d7-bdc1-af4423df06fa
+
+	/// Todos os ciclos trimestrais iniciados até o fim do mês.
+	measure 'AVD finalizadas acumuladas' =
+			VAR _fim = EOMONTH ( [Mês selecionado], 0 )
+			RETURN
+			    CALCULATE ( [AVD finalizadas], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral", 'Ciclo AVD'[data_inicio] <= _fim )
+		formatString: #,##0
+		displayFolder: AVD\Acumulado
+		lineageTag: 3d9b09ff-d9f7-4023-b63f-da0505482579
+
+	/// Todos os ciclos trimestrais iniciados até o fim do mês.
+	measure 'AVD avaliações acumuladas' =
+			VAR _fim = EOMONTH ( [Mês selecionado], 0 )
+			RETURN
+			    CALCULATE ( [AVD avaliações], REMOVEFILTERS ( 'Ciclo AVD' ), 'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral", 'Ciclo AVD'[data_inicio] <= _fim )
+		formatString: #,##0
+		displayFolder: AVD\Acumulado
+		lineageTag: f332100a-7140-4f49-befe-2e4f73537bff
+
+	/// Finalizadas / avaliações acumuladas x 100.
+	measure 'AVD % concluídas acumulado' = DIVIDE ( [AVD finalizadas acumuladas], [AVD avaliações acumuladas] ) * 100
+		formatString: #,##0.0"%"
+		displayFolder: AVD\Acumulado
+		lineageTag: ab8183be-aa6c-4c64-8f06-24a437e0edc3
+
+	/// Ciclos com avaliação iniciados até o fim do mês. Como no web app, ignora os filtros de pessoa.
+	measure 'AVD ciclos trimestrais' =
+			VAR _fim = EOMONTH ( [Mês selecionado], 0 )
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT ( Avaliacao[ciclo_key] ),
+			        ALL (),
+			        Avaliacao[qtd_avaliacao] = 1,                  // 1 linha por avaliação (a fato tem linhas de critério)
+			        'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral",
+			        'Ciclo AVD'[data_inicio] <= _fim
+			    )
+		formatString: #,##0
+		displayFolder: AVD\Acumulado
+		lineageTag: 1a327656-7ed9-45ac-981e-e83bbd4d86fc
+
+	/// Coluna "Ciclos" da tabela por colaborador (respeita a linha).
+	measure 'AVD ciclos do colaborador' =
+			VAR _fim = EOMONTH ( [Mês selecionado], 0 )
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT ( Avaliacao[ciclo_key] ),
+			        REMOVEFILTERS ( 'Ciclo AVD' ),
+			        KEEPFILTERS ( Avaliacao[qtd_avaliacao] = 1 ),
+			        'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral",
+			        'Ciclo AVD'[data_inicio] <= _fim
+			    )
+		formatString: #,##0
+		displayFolder: AVD\Acumulado
+		lineageTag: 03032b81-553a-423d-8f87-006edfdeb031
+
+	/// Por colaborador: Finalizada / Pendente / Fora do ciclo (só para quem tem avaliação acumulada).
+	measure 'AVD situação no ciclo atual' =
+			IF (
+			    NOT ISBLANK ( [AVD avaliações acumuladas] ),
+			    IF (
+			        ISBLANK ( [AVD avaliações (ciclo)] ),
+			        "Fora do ciclo",
+			        IF ( [AVD finalizadas (ciclo)] > 0, "Finalizada", "Pendente" )
+			    )
+			)
+		displayFolder: AVD\Acumulado
+		lineageTag: 4b2df6b1-6072-4590-b244-9496e2f8bd81
+
+	/// Código do indicador no filtro do visual.
+	measure 'Indicador selecionado' = SELECTEDVALUE ( 'Meta Indicador'[indicador] )
+		displayFolder: Metas e status\Componentes
+		lineageTag: 4d6a26c6-72f7-47b5-b407-dc46c5bb09e7
+
+	/// Início de vigência da meta em vigor hoje.
+	measure 'Meta vigência' =
+			VAR _hoje = [Hoje]
+			RETURN
+			    CALCULATE ( MAX ( 'Meta Indicador'[vigencia_inicio] ), 'Meta Indicador'[vigencia_inicio] <= _hoje )
+		formatString: dd/mm/yyyy
+		displayFolder: Metas e status\Componentes
+		lineageTag: 5b3fd108-2e65-4ff3-b925-f6c2b8eb2711
+
+	/// Valor-alvo (linha de meta nos gráficos).
+	measure Meta =
+			VAR _v = [Meta vigência]
+			RETURN
+			    CALCULATE ( MAX ( 'Meta Indicador'[meta] ), 'Meta Indicador'[vigencia_inicio] = _v )
+		formatString: #,##0.0
+		displayFolder: Metas e status
+		lineageTag: 19358a66-01a6-4bf2-a52d-f3b006898cc0
+
+	/// Limite de Atenção.
+	measure 'Meta limite amarelo' =
+			VAR _v = [Meta vigência]
+			RETURN
+			    CALCULATE ( MAX ( 'Meta Indicador'[limite_amarelo] ), 'Meta Indicador'[vigencia_inicio] = _v )
+		formatString: #,##0.0
+		displayFolder: Metas e status\Componentes
+		lineageTag: bbbefc57-250c-41a1-b35d-6aa75a00107c
+
+	/// Limite de Crítico.
+	measure 'Meta limite vermelho' =
+			VAR _v = [Meta vigência]
+			RETURN
+			    CALCULATE ( MAX ( 'Meta Indicador'[limite_vermelho] ), 'Meta Indicador'[vigencia_inicio] = _v )
+		formatString: #,##0.0
+		displayFolder: Metas e status\Componentes
+		lineageTag: d2ad886d-3882-499e-a245-aedf6ed2b9a4
+
+	/// menor_melhor, maior_melhor ou faixa.
+	measure 'Meta sentido' =
+			VAR _v = [Meta vigência]
+			RETURN
+			    CALCULATE ( SELECTEDVALUE ( 'Meta Indicador'[sentido] ), 'Meta Indicador'[vigencia_inicio] = _v )
+		displayFolder: Metas e status\Componentes
+		lineageTag: d13c9fa8-3607-44d2-aa11-57bf7096945a
+
+	/// %, h, dias ou qtd.
+	measure 'Meta unidade' =
+			VAR _v = [Meta vigência]
+			RETURN
+			    CALCULATE ( SELECTEDVALUE ( 'Meta Indicador'[unidade] ), 'Meta Indicador'[vigencia_inicio] = _v )
+		displayFolder: Metas e status\Componentes
+		lineageTag: 5eb5b3d7-9e41-489e-8d9a-dd29f15603dc
+
+	/// Valor do card, na unidade da meta.
+	measure 'Valor do indicador' =
+			SWITCH (
+			    [Indicador selecionado],
+			    "turnover", [Desligamentos] + 0,
+			    "absenteismo", [Absenteísmo %],
+			    "hora_extra", [HE %],
+			    "banco_horas", [Banco saldo médio (h)],
+			    "sla_vagas", [SLA vagas (card)],
+			    "feedback", [Cobertura de feedback %],
+			    "medidas_disciplinares", [Medidas disciplinares (card)],
+			    "avd_conclusao", [AVD % concluídas]
+			)
+		formatString: #,##0.0
+		displayFolder: Metas e status
+		lineageTag: f756ac3a-e950-481b-af2d-cf044f181e29
+
+	/// "vs." do card: mês de comparação; na AVD, o ciclo anterior.
+	measure 'Valor de comparação' =
+			VAR _ind = [Indicador selecionado]
+			VAR _c = [Mês de comparação]
+			RETURN
+			    IF (
+			        _ind = "avd_conclusao",
+			        [AVD % concluídas (ciclo anterior)],
+			        IF ( NOT ISBLANK ( _c ), CALCULATE ( [Valor do indicador], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _c ) )
+			    )
+		formatString: #,##0.0
+		displayFolder: Metas e status
+		lineageTag: f01a388d-d97d-444f-8f07-a5f86ab05864
+
+	/// Verde / Amarelo / Vermelho / Sem meta / Sem dados.
+	measure Status =
+			VAR _ind = [Indicador selecionado]
+			VAR _meta = [Meta]
+			VAR _am = [Meta limite amarelo]
+			VAR _vm = [Meta limite vermelho]
+			VAR _sentido = [Meta sentido]
+			VAR _v = [Valor do indicador]
+			VAR _x = IF ( _sentido = "faixa", ABS ( _v ), _v )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( _ind ), BLANK (),
+			        ISBLANK ( _meta ), "Sem meta",
+			        ISBLANK ( _v ), "Sem dados",
+			        _sentido = "maior_melhor", IF ( _x < _vm, "Vermelho", IF ( _x < _am, "Amarelo", "Verde" ) ),
+			        IF ( _x > _vm, "Vermelho", IF ( _x > _am, "Amarelo", "Verde" ) )
+			    )
+		displayFolder: Metas e status
+		lineageTag: 45f25506-7e43-403d-bb94-fd9569a8245c
+
+	/// Texto do chip.
+	measure 'Status (texto)' = SWITCH ( [Status], "Verde", "Dentro da meta", "Amarelo", "Atenção", "Vermelho", "Crítico", [Status] )
+		displayFolder: Metas e status
+		lineageTag: 5e9db02c-aacf-4ace-93bf-df89f58deb09
+
+	/// Formatação condicional (Valor do campo): cor do ponto/chip/faixa.
+	measure 'Status cor' = SWITCH ( [Status], "Verde", "#6EE7B7", "Amarelo", "#FDE047", "Vermelho", "#FDA4AF", "#E9D5FF" )
+		displayFolder: Metas e status
+		lineageTag: f2f6b77a-5613-451c-930d-8804616299bb
+
+	/// Valor - comparação, na unidade do indicador.
+	measure Variação =
+			VAR _a = [Valor do indicador]
+			VAR _c = [Valor de comparação]
+			RETURN
+			    IF ( NOT ISBLANK ( _a ) && NOT ISBLANK ( _c ), _a - _c )
+		formatString: +#,##0.0;-#,##0.0;0.0
+		displayFolder: Metas e status
+		lineageTag: 7d6bef76-a053-460c-bb08-fe77df56c1f5
+
+	/// Igual ao delta() do app.js: seta pela direção; p.p. para %, "h" para o banco, dias para o SLA, % para medidas.
+	measure 'Variação (texto)' =
+			VAR _a = [Valor do indicador]
+			VAR _c = [Valor de comparação]
+			VAR _u = [Meta unidade]
+			VAR _d = _a - _c
+			VAR _abs = ABS ( _d )
+			VAR _txt =
+			    SWITCH (
+			        _u,
+			        "%", FORMAT ( _abs, "#,##0.0", "pt-BR" ) & " p.p.",
+			        "h", FORMAT ( _abs, "#,##0.0", "pt-BR" ) & "h",
+			        "dias", FORMAT ( _abs, "#,##0", "pt-BR" ) & IF ( _abs >= 1.5, " dias", " dia" ),
+			        IF (
+			            _c <> 0,
+			            FORMAT ( ABS ( _d / _c ) * 100, "#,##0.0", "pt-BR" ) & "%",
+			            FORMAT ( _abs, "#,##0", "pt-BR" )
+			        )
+			    )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( _a ) || ISBLANK ( _c ), "sem comparação",
+			        _abs < 1E-9, "estável",
+			        IF ( _d > 0, "▲ ", "▼ " ) & _txt
+			    )
+		displayFolder: Metas e status
+		lineageTag: abd7c9c5-7371-4360-91cc-0b3a5ace9882
+
+	/// Melhorou = verde-limão; piorou = vermelho; sem comparação/estável = roxo Lumina.
+	measure 'Variação cor' =
+			VAR _a = [Valor do indicador]
+			VAR _c = [Valor de comparação]
+			VAR _s = [Meta sentido]
+			VAR _d = _a - _c
+			VAR _melhor =
+			    SWITCH ( _s, "faixa", ABS ( _a ) < ABS ( _c ), "maior_melhor", _d > 0, _d < 0 )
+			RETURN
+			    IF (
+			        ISBLANK ( _a ) || ISBLANK ( _c ) || ABS ( _d ) < 1E-9,
+			        "#E9D5FF",
+			        IF ( _melhor, "#6EE7B7", "#FDA4AF" )
+			    )
+		displayFolder: Metas e status
+		lineageTag: 74e9248f-8328-4246-8b78-038d7f87e1ce
+
+	/// Painel de Atenção: área com o PIOR valor do indicador no mês (empates: todas). Só em Atenção/Crítico.
+	measure 'Área crítica' =
+			VAR _ind = [Indicador selecionado]
+			VAR _st = [Status]
+			VAR _sentido = [Meta sentido]
+			RETURN
+			    IF (
+			        _st IN { "Amarelo", "Vermelho" } && _ind <> "sla_vagas",
+			        IF (
+			            ISFILTERED ( Colaborador[area] ),
+			            CONCATENATEX ( VALUES ( Colaborador[area] ), Colaborador[area], ", ", Colaborador[area], ASC ),
+			            VAR _t =
+			                FILTER (
+			                    ADDCOLUMNS ( VALUES ( Colaborador[area] ), "@v", [Valor do indicador] ),
+			                    NOT ISBLANK ( [@v] )
+			                )
+			            VAR _k = ADDCOLUMNS ( _t, "@k", IF ( _sentido = "faixa", ABS ( [@v] ), [@v] ) )
+			            VAR _pior = IF ( _sentido = "maior_melhor", MINX ( _k, [@k] ), MAXX ( _k, [@k] ) )
+			            RETURN
+			                CONCATENATEX ( FILTER ( _k, ABS ( [@k] - _pior ) < 1E-9 ), Colaborador[area], ", ", Colaborador[area], ASC )
+			        )
+			    )
+		displayFolder: Metas e status
+		lineageTag: 22b98f54-1577-44f4-bdde-4c0c8b078ef9
+
+	/// Linha do Painel de Atenção (igual ao app.js).
+	measure 'Área crítica (texto)' =
+			VAR _ind = [Indicador selecionado]
+			VAR _st = [Status]
+			VAR _a = [Área crítica]
+			VAR _p = SUBSTITUTE ( _a, ", ", "|" )
+			VAR _n = IF ( ISBLANK ( _a ) || _a = "", 0, PATHLENGTH ( _p ) )
+			VAR _tres =
+			    PATHITEM ( _p, 1 )
+			        & IF ( _n >= 2, ", " & PATHITEM ( _p, 2 ) )
+			        & IF ( _n >= 3, ", " & PATHITEM ( _p, 3 ) )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        _n = 1, "Área crítica: " & _a,
+			        _n > 1, "Áreas críticas (empate): " & _tres & IF ( _n > 3, " e mais " & ( _n - 3 ) ),
+			        _st = "Verde", "Nenhuma área crítica",
+			        _ind = "sla_vagas" && _st IN { "Amarelo", "Vermelho" }, "Vagas não têm área",
+			        "-"
+			    )
+		displayFolder: Metas e status
+		lineageTag: 8a35b579-96d7-4a8d-b8bd-874856068743
+
+	/// "5,9%", "-4,2h", "49 dias", "38". Sem valor = "-".
+	measure 'Valor do indicador (texto)' =
+			VAR _v = [Valor do indicador]
+			VAR _u = [Meta unidade]
+			RETURN
+			    IF (
+			        ISBLANK ( _v ),
+			        "-",
+			        SWITCH (
+			            _u,
+			            "%", FORMAT ( _v, "#,##0.0", "pt-BR" ) & "%",
+			            "h", IF ( _v > 0, "+" ) & FORMAT ( _v, IF ( ABS ( _v ) < 10, "#,##0.0", "#,##0" ), "pt-BR" ) & "h",
+			            "dias", FORMAT ( _v, "#,##0", "pt-BR" ) & " dias",
+			            FORMAT ( _v, "#,##0", "pt-BR" )
+			        )
+			    )
+		displayFolder: Metas e status\Textos
+		lineageTag: 8214cb36-c2a9-4489-8323-b5d952da6adb
+
+	/// "4,0%", "±4h", "25 dias", "50".
+	measure 'Meta (texto)' =
+			VAR _m = [Meta]
+			VAR _u = [Meta unidade]
+			RETURN
+			    IF (
+			        ISBLANK ( _m ),
+			        "-",
+			        IF (
+			            [Meta sentido] = "faixa",
+			            "±" & FORMAT ( _m, "#,##0", "pt-BR" ) & "h",
+			            SWITCH (
+			                _u,
+			                "%", FORMAT ( _m, "#,##0.0", "pt-BR" ) & "%",
+			                "dias", FORMAT ( _m, "#,##0", "pt-BR" ) & " dias",
+			                "h", FORMAT ( _m, "#,##0.0", "pt-BR" ) & "h",
+			                FORMAT ( _m, "#,##0", "pt-BR" )
+			            )
+			        )
+			    )
+		displayFolder: Metas e status\Textos
+		lineageTag: 65780262-2e57-49e2-857e-87ff9ba2d5a7
+
+	/// "● Atenção · meta 3,0%". Cor do "●" = [Status cor].
+	measure 'Chip (texto)' = "● " & [Status (texto)] & " · meta " & [Meta (texto)]
+		displayFolder: Metas e status\Textos
+		lineageTag: bfe741fb-8c3f-42d6-ad29-f61e855d3dab
+
+	/// "vs. Ago/2026", "vs. ciclo anterior" + aviso de mês parcial.
+	measure 'Comparação (texto)' =
+			VAR _ind = [Indicador selecionado]
+			VAR _base =
+			    IF (
+			        _ind = "avd_conclusao",
+			        "vs. ciclo anterior",
+			        IF ( NOT ISBLANK ( [Mês de comparação] ), "vs. " & [Mês de comparação (texto)] )
+			    )
+			RETURN
+			    _base
+		displayFolder: Metas e status\Textos
+		lineageTag: 2e72624a-3895-40a7-b1bb-6536bfd43867
+
+	/// Banco: "+814h / -1.450h"; Feedback: "264 feedbacks no mês"; AVD: "119 / 121".
+	measure 'Linha extra (texto)' =
+			VAR _ind = [Indicador selecionado]
+			VAR _pos = [Banco saldo positivo (h)]
+			VAR _neg = [Banco saldo negativo (h)]
+			VAR _posTxt = IF ( _pos > 0, "+" ) & FORMAT ( _pos, IF ( ABS ( _pos ) < 10, "#,##0.0", "#,##0" ), "pt-BR" ) & "h"
+			VAR _negTxt = IF ( _neg > 0, "+" ) & FORMAT ( _neg, IF ( ABS ( _neg ) < 10, "#,##0.0", "#,##0" ), "pt-BR" ) & "h"
+			RETURN
+			    SWITCH (
+			        _ind,
+			        "banco_horas", IF ( [Banco colaboradores com saldo] > 0, _posTxt & " / " & _negTxt, "saldo a partir de 09/2026" ),
+			        "feedback", FORMAT ( [Feedbacks] + 0, "#,##0", "pt-BR" ) & " feedbacks no mês",
+			        "avd_conclusao",
+			            IF (
+			                NOT ISBLANK ( [AVD avaliações (ciclo)] ),
+			                FORMAT ( [AVD finalizadas (ciclo)], "#,##0", "pt-BR" ) & " / " & FORMAT ( [AVD avaliações (ciclo)], "#,##0", "pt-BR" )
+			            )
+			    )
+		displayFolder: Metas e status\Textos
+		lineageTag: bf81942c-fdbb-45f8-ab9c-b4c47e392bab
+
+	/// Turnover por mês do eixo.
+	measure 'Série Turnover %' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m, CALCULATE ( [Turnover %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _e ) )
+		formatString: #,##0.0"%"
+		displayFolder: Séries
+		lineageTag: 982a5389-3069-41d3-a21c-27cd800c5e60
+
+	/// Absenteísmo por mês do eixo.
+	measure 'Série Absenteísmo %' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m, CALCULATE ( [Absenteísmo %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _e ) )
+		formatString: #,##0.0"%"
+		displayFolder: Séries
+		lineageTag: 1dabce48-148e-49fe-81c8-334af6e76f57
+
+	/// HE % por mês do eixo.
+	measure 'Série HE %' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m, CALCULATE ( [HE %], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _e ) )
+		formatString: #,##0.0"%"
+		displayFolder: Séries
+		lineageTag: 6e4607b3-c8be-45a5-bf8c-8217c7ad4363
+
+	/// Variação do banco por mês do eixo.
+	measure 'Série Banco variação (h)' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m, CALCULATE ( [Banco variação do mês (h)], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _e ) )
+		formatString: +#,##0.0"h";-#,##0.0"h";0.0"h"
+		displayFolder: Séries
+		lineageTag: baf98e97-8b01-42be-9f0e-02e0b74cdb5f
+
+	/// Mês sem vaga fechada fica sem ponto.
+	measure 'Série SLA vagas (dias)' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m, CALCULATE ( [SLA vagas (dias)], REMOVEFILTERS ( Calendario ), Calendario[mes_ref] = _e ) )
+		formatString: #,##0" dias"
+		displayFolder: Séries
+		lineageTag: 1d2074f4-4d6c-4081-b392-058c09bd0b3d
+
+	/// Linha da meta no gráfico (filtro de visual em 'Meta Indicador'[indicador]).
+	measure 'Série Meta' =
+			VAR _e = SELECTEDVALUE ( 'Eixo Mes'[mes_ref] )
+			VAR _m = [Mês selecionado]
+			RETURN
+			    IF ( YEAR ( _e ) = YEAR ( _m ) && _e <= _m && [Indicador selecionado] <> "turnover", [Meta] )   // meta de turnover é em desligamentos, não cabe no gráfico de %
+		formatString: #,##0.0
+		displayFolder: Séries
+		lineageTag: 315d3584-a7f0-4b35-aa0b-ecd3efb0abc7
+
+	/// 1 = esteve ativo >= 1 dia no mês (headcount).
+	measure 'Na equipe do mês' = IF ( NOT ISEMPTY ( Headcount ), 1 )
+		formatString: 0
+		displayFolder: Detalhamento
+		lineageTag: b629636a-d78b-433b-9aff-6ec2ae998a3f
+
+	/// Situação da pessoa no ciclo vigente: Finalizada / Pendente / "-".
+	measure 'Detalhe AVD (texto)' =
+			IF (
+			    ISBLANK ( [AVD avaliações (ciclo)] ),
+			    "-",
+			    IF ( [AVD finalizadas (ciclo)] > 0, "Finalizada", "Pendente" )
+			)
+		displayFolder: Detalhamento
+		lineageTag: 127dc3cf-1a06-4e1e-b653-87fd45ee4d03
+
+	/// "Ativo" ou "Desligado dd/mm/aaaa".
+	measure 'Detalhe situação (texto)' =
+			VAR _dem = MAX ( Colaborador[data_demissao] )
+			RETURN
+			    IF (
+			        HASONEVALUE ( Colaborador[nome] ),
+			        IF ( SELECTEDVALUE ( Colaborador[situacao] ) = "Desligado", "Desligado " & FORMAT ( _dem, "dd/mm/yyyy", "pt-BR" ), "Ativo" )
+			    )
+		displayFolder: Detalhamento
+		lineageTag: 3e15c66c-1640-464f-a081-d8e503fbf87d
+
+	/// SLA do mês para os cards: 0 quando nenhuma vaga foi fechada no mês.
+	measure 'SLA vagas (card)' = COALESCE ( [SLA vagas (dias)], 0 )
+		formatString: #,##0" dias"
+		displayFolder: Recrutamento
+		lineageTag: db8ba9ce-6e97-4166-91b6-cb60801f941b
+
+	/// Cor da barra de variação do banco: negativa em vermelho, positiva no verde.
+	measure 'Série Banco cor' = IF ( [Série Banco variação (h)] < 0, "#FB7185", "#C084FC" )
+		displayFolder: Séries
+		lineageTag: 7a918f2f-4440-413d-84e3-32e5a5115e9f
+
+	column x
+		dataType: int64
+		isHidden
+		lineageTag: e677eafb-0ada-44ed-85f9-378ced10a0f1
+		summarizeBy: none
+		sourceColumn: [x]
+
+	partition _Medidas = calculated
+		source = ROW ( "x", 0 )
+

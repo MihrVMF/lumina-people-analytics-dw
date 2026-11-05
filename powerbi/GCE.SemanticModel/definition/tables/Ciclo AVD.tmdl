@@ -1,0 +1,194 @@
+﻿table 'Ciclo AVD'
+	lineageTag: e2de2912-624a-4570-94e4-15a808608d59
+
+	column ciclo_key
+		dataType: int64
+		formatString: 0
+		lineageTag: bef57353-bb7d-46ab-815f-2b264999cc2c
+		summarizeBy: none
+		sourceColumn: ciclo_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciclo
+		dataType: string
+		lineageTag: 21104b14-0285-4c42-bf6d-b330c2f63d26
+		summarizeBy: none
+		sourceColumn: ciclo
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: d3802e22-f57c-4316-ba43-6c8e0984f183
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_inicio
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: da8c1652-d352-449c-b563-d0dfe5066b74
+		summarizeBy: none
+		sourceColumn: data_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_fim
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 24ee06fe-0f2d-4331-95aa-7f0376bdc45f
+		summarizeBy: none
+		sourceColumn: data_fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tipo_ciclo
+		dataType: string
+		lineageTag: 7087a2d8-45f1-4107-bb6f-dff7dad07d1f
+		summarizeBy: none
+		sourceColumn: tipo_ciclo
+
+		annotation SummarizationSetBy = Automatic
+
+	column escala_max
+		dataType: int64
+		formatString: 0
+		lineageTag: 698f54a8-f931-4e7f-bee7-a2401a6b22cf
+		summarizeBy: none
+		sourceColumn: escala_max
+
+		annotation SummarizationSetBy = Automatic
+
+	column escala
+		dataType: string
+		lineageTag: ffad30dd-d93e-4cd3-9097-6afebbfcb818
+		summarizeBy: none
+		sourceColumn: escala
+
+		annotation SummarizationSetBy = Automatic
+
+	column ano_trimestre_ref
+		dataType: string
+		lineageTag: e7e227b7-5b5c-4ece-afb3-d1806b678498
+		summarizeBy: none
+		sourceColumn: ano_trimestre_ref
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Posição do ciclo entre os de Desempenho trimestral, por data_inicio e ciclo_key (ROW_NUMBER da vw_avd). Ciclo sem data_inicio vai para o fim, como o NULLS LAST do PostgreSQL. Outros tipos: vazio.
+	column ciclo_ordem =
+			IF (
+			    'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral",
+			    VAR _ini = COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) )
+			    VAR _k = 'Ciclo AVD'[ciclo_key]
+			    RETURN
+			        COUNTROWS (
+			            FILTER (
+			                ALLNOBLANKROW ( 'Ciclo AVD'[ciclo_key], 'Ciclo AVD'[data_inicio], 'Ciclo AVD'[tipo_ciclo] ),
+			                'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral"
+			                    && (
+			                        COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) < _ini
+			                            || ( COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) = _ini && 'Ciclo AVD'[ciclo_key] <= _k )
+			                    )
+			            )
+			        )
+			)
+		isHidden
+		lineageTag: 3eef179c-bc58-42e8-aded-256f1dd00706
+		summarizeBy: none
+
+	/// Ciclo trimestral imediatamente anterior na mesma ordem (LAG da vw_avd). Outros tipos: vazio.
+	column ciclo_anterior_key =
+			IF (
+			    'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral",
+			    VAR _ini = COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) )
+			    VAR _k = 'Ciclo AVD'[ciclo_key]
+			    VAR _anteriores =
+			        FILTER (
+			            ALLNOBLANKROW ( 'Ciclo AVD'[ciclo_key], 'Ciclo AVD'[data_inicio], 'Ciclo AVD'[tipo_ciclo] ),
+			            'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral"
+			                && (
+			                    COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) < _ini
+			                        || ( COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) = _ini && 'Ciclo AVD'[ciclo_key] < _k )
+			                )
+			        )
+			    VAR _anterior =
+			        TOPN ( 1, _anteriores, COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ), DESC, 'Ciclo AVD'[ciclo_key], DESC )
+			    RETURN
+			        MAXX ( _anterior, 'Ciclo AVD'[ciclo_key] )
+			)
+		isHidden
+		lineageTag: 2e462826-ca08-4f10-8345-8bb317124e68
+		summarizeBy: none
+
+	/// 1º dia do mês de início do ciclo trimestral (vw_avd). Sem data_inicio: vazio (nunca fica vigente).
+	column vigente_de =
+			IF (
+			    'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral" && NOT ISBLANK ( 'Ciclo AVD'[data_inicio] ),
+			    DATE ( YEAR ( 'Ciclo AVD'[data_inicio] ), MONTH ( 'Ciclo AVD'[data_inicio] ), 1 )
+			)
+		isHidden
+		lineageTag: 369569d0-4b16-4677-a669-2fabc832470b
+		summarizeBy: none
+
+	/// Mês anterior ao início do próximo ciclo trimestral; o último fica vigente até o mês de hoje (Calendario[ate_hoje], o hoje do refresh). Regra da vw_avd.
+	column vigente_ate =
+			IF (
+			    'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral" && NOT ISBLANK ( 'Ciclo AVD'[data_inicio] ),
+			    VAR _ini = 'Ciclo AVD'[data_inicio]
+			    VAR _k = 'Ciclo AVD'[ciclo_key]
+			    VAR _seguintes =
+			        FILTER (
+			            ALLNOBLANKROW ( 'Ciclo AVD'[ciclo_key], 'Ciclo AVD'[data_inicio], 'Ciclo AVD'[tipo_ciclo] ),
+			            'Ciclo AVD'[tipo_ciclo] = "Desempenho trimestral"
+			                && (
+			                    COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) > _ini
+			                        || ( COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ) = _ini && 'Ciclo AVD'[ciclo_key] > _k )
+			                )
+			        )
+			    VAR _proximo =
+			        TOPN ( 1, _seguintes, COALESCE ( 'Ciclo AVD'[data_inicio], DATE ( 9999, 12, 31 ) ), ASC, 'Ciclo AVD'[ciclo_key], ASC )
+			    VAR _proxIni = MAXX ( _proximo, 'Ciclo AVD'[data_inicio] )   // vazio se não há próximo (ou se ele não tem data)
+			    VAR _hoje =
+			        MAXX ( FILTER ( ALLNOBLANKROW ( Calendario[data], Calendario[ate_hoje] ), Calendario[ate_hoje] = "1" ), Calendario[data] )
+			    RETURN
+			        IF (
+			            ISBLANK ( _proxIni ),
+			            DATE ( YEAR ( _hoje ), MONTH ( _hoje ), 1 ),
+			            EDATE ( DATE ( YEAR ( _proxIni ), MONTH ( _proxIni ), 1 ), -1 )
+			        )
+			)
+		isHidden
+		lineageTag: 55b1de0b-e980-4b6c-8896-eda7a5b72627
+		summarizeBy: none
+
+	/// Verdadeiro se o ciclo tem pelo menos 1 avaliação (linha com qtd_avaliacao = 1 na Avaliacao). O web app só escolhe ciclo vigente entre esses.
+	column tem_avaliacao =
+			VAR _k = 'Ciclo AVD'[ciclo_key]
+			RETURN
+			    NOT ISEMPTY (
+			        FILTER (
+			            ALL ( Avaliacao[ciclo_key], Avaliacao[qtd_avaliacao] ),
+			            Avaliacao[ciclo_key] = _k && Avaliacao[qtd_avaliacao] = 1
+			        )
+			    )
+		isHidden
+		lineageTag: ee05ddee-7b93-4626-9dd4-ff3ff1345647
+		summarizeBy: none
+
+	partition 'Ciclo AVD' = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_dim_ciclo_avaliacao.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"ciclo_key", Int64.Type}, {"ciclo", type text}, {"status", type text}, {"data_inicio", type date}, {"data_fim", type date}, {"tipo_ciclo", type text}, {"escala_max", Int64.Type}, {"escala", type text}, {"ano_trimestre_ref", type text}}, "en-US")
+				in
+				    TiposAlterados
+

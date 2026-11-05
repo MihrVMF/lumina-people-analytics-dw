@@ -1,0 +1,85 @@
+﻿table 'Tipo Ocorrencia'
+	lineageTag: 168b5a86-4397-435c-8c7b-30332df28432
+
+	column tipo_ocorrencia_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9b3f456f-a65c-42d4-8658-f9617c3db8d9
+		summarizeBy: none
+		sourceColumn: tipo_ocorrencia_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo
+		dataType: string
+		lineageTag: 71d93744-d05c-4835-a913-d8395105553d
+		summarizeBy: none
+		sourceColumn: tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column classificacao
+		dataType: string
+		lineageTag: 39ebe8f2-dc9f-477c-8ca2-a61bd846735e
+		summarizeBy: none
+		sourceColumn: classificacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column grupo
+		dataType: string
+		lineageTag: 0c8b6293-6d84-48a2-9538-42e9fa8c3bd6
+		summarizeBy: none
+		sourceColumn: grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_feedback
+		dataType: string
+		lineageTag: 681687a5-3b0b-4397-ac1a-38038cb9c0a0
+		summarizeBy: none
+		sourceColumn: tipo_feedback
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_medida
+		dataType: string
+		lineageTag: 8dec25b1-7b0b-4dcf-a221-93babe1ba73c
+		summarizeBy: none
+		sourceColumn: tipo_medida
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Rótulo do web app: 'Para melhorar' aparece como 'Oportunidade de melhoria'.
+	column tipo_feedback_exibicao =
+			IF (
+			    'Tipo Ocorrencia'[tipo_feedback] = "Para melhorar",
+			    "Oportunidade de melhoria",
+			    'Tipo Ocorrencia'[tipo_feedback]
+			)
+		lineageTag: d3701ff2-e4ea-45ce-b8e5-5474294db4d4
+		summarizeBy: none
+		sortByColumn: tipo_feedback_ordem
+
+	/// Ordem de exibição: Positivo, Neutro, Oportunidade de melhoria.
+	column tipo_feedback_ordem = SWITCH ( 'Tipo Ocorrencia'[tipo_feedback], "Positivo", 1, "Neutro", 2, "Para melhorar", 3, 9 )
+		isHidden
+		lineageTag: 177bf062-ccf0-4980-be5d-7895e9610c19
+		summarizeBy: none
+
+	/// Ordem de exibição: Advertência, Suspensão, Outros.
+	column tipo_medida_ordem = SWITCH ( 'Tipo Ocorrencia'[tipo_medida], "Advertência", 1, "Suspensão", 2, "Outros", 3, 9 )
+		isHidden
+		lineageTag: 908b489e-1863-4b8b-b9ab-e11fcaa0d974
+		summarizeBy: none
+
+	partition 'Tipo Ocorrencia' = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_dim_tipo_ocorrencia.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"tipo_ocorrencia_key", Int64.Type}, {"tipo", type text}, {"classificacao", type text}, {"grupo", type text}, {"tipo_feedback", type text}, {"tipo_medida", type text}}, "en-US")
+				in
+				    TiposAlterados
+

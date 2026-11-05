@@ -1,0 +1,123 @@
+﻿table Ocorrencia
+	lineageTag: 3f3accab-e1f9-4822-a108-264dc4c35c92
+
+	column ocorrencia_id
+		dataType: int64
+		formatString: 0
+		lineageTag: bcae4298-49de-4a9c-b09a-22894183bf3c
+		summarizeBy: sum
+		sourceColumn: ocorrencia_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_ocorrencia
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 5efca65a-2bee-4319-9a14-a6dc6a6993bd
+		summarizeBy: none
+		sourceColumn: data_ocorrencia
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_valida
+		dataType: string
+		lineageTag: 1c280bb5-5118-4af6-932c-3e9f758ca551
+		summarizeBy: none
+		sourceColumn: data_valida
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e8bec47-f226-4ff8-9ddb-b385c47550ef
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 67313934-f0f1-4a4c-b494-0fb815df59fe
+		summarizeBy: sum
+		sourceColumn: colaborador_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c96279fb-e240-4460-b24b-60770a253a84
+		summarizeBy: sum
+		sourceColumn: gestor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_ocorrencia_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 6553c741-cec6-4694-8f37-351d0084a54b
+		summarizeBy: none
+		sourceColumn: tipo_ocorrencia_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd
+		dataType: int64
+		formatString: 0
+		lineageTag: 8897aa44-dd6c-49e1-94d7-85b6584c5848
+		summarizeBy: sum
+		sourceColumn: qtd
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Regra da vw_ocorrencia_colaborador_mes: versão do colaborador no HEADCOUNT do mês; quem não está no headcount usa a versão da última ocorrência do mês (data desc, ocorrencia_id desc). É a coluna do relacionamento com Colaborador.
+	column colaborador_key_mes =
+			VAR _id = Ocorrencia[colaborador_id]
+			VAR _data = Ocorrencia[data_ocorrencia]
+			RETURN
+			    IF (
+			        ISBLANK ( _data ),
+			        Ocorrencia[colaborador_key],   // data inválida: fica fora das medidas ([Ocorrências]); mantém a versão original
+			        VAR _ini = DATE ( YEAR ( _data ), MONTH ( _data ), 1 )
+			        VAR _fim = EOMONTH ( _data, 0 )
+			        VAR _doHeadcount =
+			            LOOKUPVALUE ( Headcount[colaborador_key], Headcount[mes_ref], _ini, Headcount[colaborador_id], _id )
+			        RETURN
+			            IF (
+			                NOT ISBLANK ( _doHeadcount ),
+			                _doHeadcount,
+			                VAR _ultima =
+			                    TOPN (
+			                        1,
+			                        FILTER (
+			                            ALL ( Ocorrencia[ocorrencia_id], Ocorrencia[colaborador_id], Ocorrencia[data_ocorrencia], Ocorrencia[data_valida], Ocorrencia[colaborador_key] ),
+			                            Ocorrencia[colaborador_id] = _id
+			                                && Ocorrencia[data_valida] = "1"
+			                                && Ocorrencia[data_ocorrencia] >= _ini
+			                                && Ocorrencia[data_ocorrencia] <= _fim
+			                        ),
+			                        Ocorrencia[data_ocorrencia], DESC,
+			                        Ocorrencia[ocorrencia_id], DESC
+			                    )
+			                RETURN
+			                    MAXX ( _ultima, Ocorrencia[colaborador_key] )
+			            )
+			    )
+		isHidden
+		lineageTag: 2232e057-227b-4173-8da3-ee250ac3fe03
+		summarizeBy: none
+
+	partition Ocorrencia = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_ocorrencia.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"ocorrencia_id", Int64.Type}, {"data_ocorrencia", type date}, {"data_valida", type text}, {"colaborador_key", Int64.Type}, {"colaborador_id", Int64.Type}, {"gestor_key", Int64.Type}, {"tipo_ocorrencia_key", Int64.Type}, {"qtd", Int64.Type}}, "en-US")
+				in
+				    TiposAlterados
+

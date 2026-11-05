@@ -1,0 +1,107 @@
+﻿table 'Meta Indicador'
+	lineageTag: 1420656e-e2a1-4e5b-a0b9-1e2cc6be0872
+
+	column indicador
+		dataType: string
+		lineageTag: 9647b45f-6daf-49a2-ab47-90ab13842dac
+		summarizeBy: none
+		sourceColumn: indicador
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: 3adf1c86-c5b7-47d2-a9c3-97e3276c8db6
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidade
+		dataType: string
+		lineageTag: 04e39a23-f741-4c13-8567-c70c0bcd82f1
+		summarizeBy: none
+		sourceColumn: unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column meta
+		dataType: double
+		lineageTag: baf8ce21-13c0-4c9e-a064-d939cbdb7abd
+		summarizeBy: sum
+		sourceColumn: meta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column limite_amarelo
+		dataType: double
+		lineageTag: 249af5b2-44ed-4ecb-8d76-df544b8b1fc7
+		summarizeBy: sum
+		sourceColumn: limite_amarelo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column limite_vermelho
+		dataType: double
+		lineageTag: 7b1a163d-a5fe-45d7-acc1-3a33648c3005
+		summarizeBy: sum
+		sourceColumn: limite_vermelho
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sentido
+		dataType: string
+		lineageTag: dad23893-4c6a-4a87-9ff9-b04b3edf6411
+		summarizeBy: none
+		sourceColumn: sentido
+
+		annotation SummarizationSetBy = Automatic
+
+	column vigencia_inicio
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5b17573a-31ab-4f48-8659-1d33c0475555
+		summarizeBy: none
+		sourceColumn: vigencia_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column observacao
+		dataType: string
+		lineageTag: a20fd75e-8e90-459b-926a-925ba54630d3
+		summarizeBy: none
+		sourceColumn: observacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column atualizado_em
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6885f5d2-49b5-4ccd-a868-fc4bd0a13665
+		summarizeBy: none
+		sourceColumn: atualizado_em
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Meta Indicador' = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_meta_indicador.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"indicador", type text}, {"nome", type text}, {"unidade", type text}, {"meta", type number}, {"limite_amarelo", type number}, {"limite_vermelho", type number}, {"sentido", type text}, {"vigencia_inicio", type date}, {"observacao", type text}, {"atualizado_em", type date}}, "en-US")
+				in
+				    TiposAlterados
+
+	annotation PBI_ResultType = Table
+

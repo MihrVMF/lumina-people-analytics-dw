@@ -1,0 +1,116 @@
+﻿table Headcount
+	lineageTag: c9e69b60-e20a-4dc0-971a-087bb653cbe9
+
+	column mes_ref
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 74ce4214-3b8f-4a4a-bb94-12db5318fd3f
+		summarizeBy: none
+		sourceColumn: mes_ref
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ef14d54-8198-4533-a7d5-e0af8b56d801
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f36e09ac-55ad-41f0-80fa-765bad140a87
+		summarizeBy: sum
+		sourceColumn: gestor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 07ffb16d-2e6a-48e9-8eab-9635791bf473
+		summarizeBy: sum
+		sourceColumn: colaborador_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_periodo
+		dataType: int64
+		formatString: 0
+		lineageTag: 84d2aa71-aaee-4a32-acd6-f79c3454ebea
+		summarizeBy: sum
+		sourceColumn: dias_periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_ativos
+		dataType: int64
+		formatString: 0
+		lineageTag: d3138efc-e87a-4e9a-ade0-7cac6225eeea
+		summarizeBy: sum
+		sourceColumn: dias_ativos
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo_inicio
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f836d7e-1597-4536-8ebd-4e916564c36c
+		summarizeBy: sum
+		sourceColumn: ativo_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo_fim
+		dataType: int64
+		formatString: 0
+		lineageTag: 2105f335-0f2b-47b0-9ba6-5c38d7acbafe
+		summarizeBy: sum
+		sourceColumn: ativo_fim
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Regra da vw_ocorrencia_colaborador_mes (coberto): 1 se a pessoa recebeu >= 1 feedback com data válida no mês do headcount, senão 0.
+	column recebeu_feedback =
+			VAR _id = Headcount[colaborador_id]
+			VAR _ini = Headcount[mes_ref]
+			VAR _fim = EOMONTH ( Headcount[mes_ref], 0 )
+			VAR _tiposFeedback =
+			    SELECTCOLUMNS (
+			        FILTER (
+			            ALLNOBLANKROW ( 'Tipo Ocorrencia'[tipo_ocorrencia_key], 'Tipo Ocorrencia'[grupo] ),
+			            'Tipo Ocorrencia'[grupo] = "Feedback"
+			        ),
+			        "k", 'Tipo Ocorrencia'[tipo_ocorrencia_key]
+			    )
+			VAR _recebeu =
+			    NOT ISEMPTY (
+			        FILTER (
+			            ALL ( Ocorrencia[colaborador_id], Ocorrencia[data_ocorrencia], Ocorrencia[data_valida], Ocorrencia[tipo_ocorrencia_key] ),
+			            Ocorrencia[colaborador_id] = _id
+			                && Ocorrencia[data_valida] = "1"
+			                && Ocorrencia[data_ocorrencia] >= _ini
+			                && Ocorrencia[data_ocorrencia] <= _fim
+			                && Ocorrencia[tipo_ocorrencia_key] IN _tiposFeedback
+			        )
+			    )
+			RETURN
+			    IF ( _recebeu, 1, 0 )
+		isHidden
+		lineageTag: a7957931-b659-4834-bb90-d26d7907d0e1
+
+	partition Headcount = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_headcount_mensal.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"mes_ref", type date}, {"colaborador_key", Int64.Type}, {"gestor_key", Int64.Type}, {"colaborador_id", Int64.Type}, {"dias_periodo", Int64.Type}, {"dias_ativos", Int64.Type}, {"ativo_inicio", Int64.Type}, {"ativo_fim", Int64.Type}}, "en-US")
+				in
+				    TiposAlterados
+

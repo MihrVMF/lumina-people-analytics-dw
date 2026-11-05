@@ -1,0 +1,9 @@
+﻿indicador,nome,unidade,meta,limite_amarelo,limite_vermelho,sentido,vigencia_inicio,observacao,atualizado_em
+turnover,Turnover,qtd,10.0000,10.0000,12.0000,menor_melhor,2026-01-01,Desligamentos no mês (máximo 10 colaboradores). Corrigido pelo RH (Joyce) em 26/10/2026; antes: 4% do headcount médio,2026-11-04
+absenteismo,Absenteísmo,%,3.0000,3.0000,3.6000,menor_melhor,2026-01-01,Horas ausentes líquidas (com abonos) / horas previstas,2026-11-04
+hora_extra,Hora extra,%,8.0000,8.0000,9.6000,menor_melhor,2026-01-01,HE 100% paga (domingo/feriado) / horas normais. Confirmado pelo RH em 26/10/2026,2026-11-04
+banco_horas,Banco de horas (saldo médio),h,4.0000,4.0000,4.8000,faixa,2026-01-01,Saldo médio por colaborador entre -4h e +4h,2026-11-04
+sla_vagas,Tempo para fechar vagas,dias,25.0000,25.0000,30.0000,menor_melhor,2026-01-01,Média de dias entre abertura e fechamento das vagas fechadas no mês,2026-11-04
+feedback,Cobertura de feedback,%,95.0000,95.0000,76.0000,maior_melhor,2026-01-01,% da equipe que recebeu ao menos 1 feedback no mês,2026-11-04
+medidas_disciplinares,Medidas disciplinares,qtd,50.0000,50.0000,60.0000,menor_melhor,2026-01-01,Quantidade de medidas no mês,2026-11-04
+avd_conclusao,AVD concluídas,%,100.0000,100.0000,80.0000,maior_melhor,2026-01-01,Avaliações finalizadas / avaliações do ciclo de Desempenho trimestral,2026-11-04

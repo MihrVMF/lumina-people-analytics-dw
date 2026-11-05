@@ -1,0 +1,33 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Calendario","Colaborador","Ciclo AVD","Tipo Ocorrencia","Avaliacao","Headcount","Movimentacao","Ocorrencia","Ponto Diario","Vaga","Meta Indicador"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Calendario
+ref table Colaborador
+ref table 'Ciclo AVD'
+ref table 'Tipo Ocorrencia'
+ref table Avaliacao
+ref table Headcount
+ref table Movimentacao
+ref table Ocorrencia
+ref table 'Ponto Diario'
+ref table Vaga
+ref table 'Meta Indicador'
+ref table Avaliador
+ref table 'Comparar com'
+ref table 'Eixo Mes'
+ref table _Medidas
+
+ref cultureInfo pt-BR
+

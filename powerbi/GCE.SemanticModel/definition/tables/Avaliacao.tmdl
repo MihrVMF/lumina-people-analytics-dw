@@ -1,0 +1,177 @@
+﻿table Avaliacao
+	lineageTag: e49f2053-b54e-420d-8c29-1ef0efe691aa
+
+	column avaliacao_id
+		dataType: string
+		lineageTag: 623b1354-ea9c-4573-aa64-0cf9b41e72da
+		summarizeBy: none
+		sourceColumn: avaliacao_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciclo_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e1e25f6-137d-4ee1-ae53-cacf6c750149
+		summarizeBy: none
+		sourceColumn: ciclo_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_referencia
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: faf9fe99-3dce-49e5-b6f4-6e8b08778a28
+		summarizeBy: none
+		sourceColumn: data_referencia
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_avaliacao
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: b295e0bc-71db-4478-bf71-8991b498b1a6
+		summarizeBy: none
+		sourceColumn: data_avaliacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 952bf896-9b47-4ab6-9e75-5bc1d00d54ac
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 21b8f0a8-60e0-4ff2-a5b9-2723be81444a
+		summarizeBy: sum
+		sourceColumn: colaborador_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8bacfd92-dc6e-4a38-9a61-a9bd77a15325
+		summarizeBy: sum
+		sourceColumn: gestor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column versao
+		dataType: int64
+		formatString: 0
+		lineageTag: c6b35338-b7fc-459e-8aaa-4d4e67ae1173
+		summarizeBy: sum
+		sourceColumn: versao
+
+		annotation SummarizationSetBy = Automatic
+
+	column respondida
+		dataType: string
+		lineageTag: 75c6b2c2-59bd-4b5c-9636-d034dd786669
+		summarizeBy: none
+		sourceColumn: respondida
+
+		annotation SummarizationSetBy = Automatic
+
+	column criterio_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ed5a07e2-1081-4b81-8b7f-f399e3b91041
+		summarizeBy: sum
+		sourceColumn: criterio_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column criterio_tipo
+		dataType: string
+		lineageTag: cfc3b1e3-97ba-4fc6-8132-ba526216f867
+		summarizeBy: none
+		sourceColumn: criterio_tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column criterio_descricao
+		dataType: string
+		lineageTag: 28b079f0-2b18-4e46-9682-da9cc46b3981
+		summarizeBy: none
+		sourceColumn: criterio_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column nota
+		dataType: double
+		lineageTag: f80f4ec9-ca67-4a4a-8fd5-ef2de73d4151
+		summarizeBy: sum
+		sourceColumn: nota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column peso
+		dataType: double
+		lineageTag: cd8f3212-c6d1-42bc-9f9a-42bd0af0597a
+		summarizeBy: sum
+		sourceColumn: peso
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nota_pct
+		dataType: double
+		lineageTag: 3dee39b7-5380-455a-bcca-c0aab5d8a11d
+		summarizeBy: sum
+		sourceColumn: nota_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column departamento_avaliado
+		dataType: string
+		lineageTag: 177a0e45-66de-4daa-8bee-25417d5eb576
+		summarizeBy: none
+		sourceColumn: departamento_avaliado
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_avaliacao
+		dataType: int64
+		formatString: 0
+		lineageTag: adc0b739-1615-41cf-9ba5-061dc378f047
+		summarizeBy: sum
+		sourceColumn: qtd_avaliacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_respondida
+		dataType: int64
+		formatString: 0
+		lineageTag: 42220312-429f-4d0e-a744-964bcdbe13cc
+		summarizeBy: sum
+		sourceColumn: qtd_respondida
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Avaliacao = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_avaliacao.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"avaliacao_id", type text}, {"ciclo_key", Int64.Type}, {"data_referencia", type date}, {"data_avaliacao", type date}, {"colaborador_key", Int64.Type}, {"colaborador_id", Int64.Type}, {"gestor_key", Int64.Type}, {"versao", Int64.Type}, {"respondida", type text}, {"criterio_id", Int64.Type}, {"criterio_tipo", type text}, {"criterio_descricao", type text}, {"nota", type number}, {"peso", type number}, {"nota_pct", type number}, {"departamento_avaliado", type text}, {"qtd_avaliacao", Int64.Type}, {"qtd_respondida", Int64.Type}}, "en-US")
+				in
+				    TiposAlterados
+

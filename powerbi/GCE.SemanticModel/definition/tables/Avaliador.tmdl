@@ -1,0 +1,47 @@
+/// Cópia reduzida de Colaborador (role-playing do AVALIADOR). Substitui a 'Referência' do Power Query. Relação ativa só com Avaliacao[gestor_key].
+table Avaliador
+	lineageTag: 7517340a-7372-4e65-8eb5-1baced268ada
+
+	column colaborador_key
+		dataType: int64
+		isHidden
+		lineageTag: 9e0f1045-2ccb-4bc9-947c-2b0bc8d8c19d
+		summarizeBy: none
+		sourceColumn: [colaborador_key]
+
+	column avaliador_id
+		dataType: int64
+		isHidden
+		lineageTag: e3df49e8-bde4-4dcd-9dc6-c8d9bb6a340d
+		summarizeBy: none
+		sourceColumn: [avaliador_id]
+
+	column avaliador_nome
+		dataType: string
+		lineageTag: 3552b3ba-5c5c-496f-9078-855299dfd3d5
+		summarizeBy: none
+		sourceColumn: [avaliador_nome]
+
+	column avaliador_area
+		dataType: string
+		lineageTag: 6c3b2230-a98e-4372-b9c5-eb76c856d3e5
+		summarizeBy: none
+		sourceColumn: [avaliador_area]
+
+	column avaliador_cargo
+		dataType: string
+		lineageTag: f8791bf6-9f6d-4a4c-aeb1-0c7b956a0f79
+		summarizeBy: none
+		sourceColumn: [avaliador_cargo]
+
+	partition Avaliador = calculated
+		source =
+				SELECTCOLUMNS (
+				    ALLNOBLANKROW ( Colaborador ),
+				    "colaborador_key", Colaborador[colaborador_key],
+				    "avaliador_id", Colaborador[colaborador_id],
+				    "avaliador_nome", Colaborador[nome],
+				    "avaliador_area", Colaborador[area],
+				    "avaliador_cargo", Colaborador[cargo]
+				)
+

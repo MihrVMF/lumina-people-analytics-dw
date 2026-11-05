@@ -1,0 +1,5 @@
+﻿ciclo_key,ciclo,status,data_inicio,data_fim,tipo_ciclo,escala_max,escala,ano_trimestre_ref
+301,AVD Desempenho Trimestral - 1º Tri 2026,finished,2026-03-01,2026-03-31,Desempenho trimestral,4,1-4,2026-T1
+302,AVD Desempenho Trimestral - 2º Tri 2026,finished,2026-06-01,2026-06-30,Desempenho trimestral,4,1-4,2026-T2
+303,AVD Desempenho Trimestral - 3º Tri 2026,in_progress,2026-09-05,2026-10-20,Desempenho trimestral,4,1-4,2026-T4
+304,Avaliação de Período de Experiência 45/90 dias - 2026,in_progress,2026-01-15,2026-12-15,Experiência,5,1-5,2026-T4

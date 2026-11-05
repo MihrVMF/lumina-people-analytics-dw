@@ -1,0 +1,125 @@
+﻿table Movimentacao
+	lineageTag: b4c28b6a-1216-4d6f-b9fa-047bbbf0fb40
+
+	column data_movimentacao
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 6ae05d40-1a54-44b3-9606-955bafb939f0
+		summarizeBy: none
+		sourceColumn: data_movimentacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 43f454b9-479d-49e3-9a54-e9326665e98e
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_key
+		dataType: int64
+		formatString: 0
+		lineageTag: d6c48de3-091e-457a-b0bb-2c3d3739788e
+		summarizeBy: sum
+		sourceColumn: gestor_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_movimentacao
+		dataType: string
+		lineageTag: f722e447-25ce-4fa4-8839-fff8da1e89ad
+		summarizeBy: none
+		sourceColumn: tipo_movimentacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo
+		dataType: string
+		lineageTag: 50519e5d-63d4-46c0-b366-2dd7216e8d71
+		summarizeBy: none
+		sourceColumn: motivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo_codigo
+		dataType: string
+		lineageTag: e10090e9-390c-4b54-be17-db52ff79c5c0
+		summarizeBy: none
+		sourceColumn: motivo_codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_desligamento
+		dataType: string
+		lineageTag: ab63f4f5-035e-4122-b4c7-7bcc8f61e6fe
+		summarizeBy: none
+		sourceColumn: tipo_desligamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column tempo_casa_dias
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b09170f-80aa-41f9-aec0-bec981247196
+		summarizeBy: sum
+		sourceColumn: tempo_casa_dias
+
+		annotation SummarizationSetBy = Automatic
+
+	column faixa_tempo_casa
+		dataType: string
+		lineageTag: b4439295-75e0-40eb-bebf-91f22a4a8efb
+		summarizeBy: none
+		sourceColumn: faixa_tempo_casa
+
+		annotation SummarizationSetBy = Automatic
+
+	column transferencia
+		dataType: string
+		lineageTag: 0534be97-68b0-491b-8357-b1599d4a518a
+		summarizeBy: none
+		sourceColumn: transferencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column suspeita_cadastro_teste
+		dataType: string
+		lineageTag: 1620742b-5426-43c8-b77e-22f3c15bafc6
+		summarizeBy: none
+		sourceColumn: suspeita_cadastro_teste
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_admissao
+		dataType: int64
+		formatString: 0
+		lineageTag: ab3c67a6-2fa8-49bd-8b40-11654b486c1c
+		summarizeBy: sum
+		sourceColumn: qtd_admissao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_desligamento
+		dataType: int64
+		formatString: 0
+		lineageTag: c8ed08cc-09c4-4ffa-bcb7-464f508678c4
+		summarizeBy: sum
+		sourceColumn: qtd_desligamento
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Movimentacao = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_fato_movimentacao.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"data_movimentacao", type date}, {"colaborador_key", Int64.Type}, {"gestor_key", Int64.Type}, {"tipo_movimentacao", type text}, {"motivo", type text}, {"motivo_codigo", type text}, {"tipo_desligamento", type text}, {"tempo_casa_dias", Int64.Type}, {"faixa_tempo_casa", type text}, {"transferencia", type text}, {"suspeita_cadastro_teste", type text}, {"qtd_admissao", Int64.Type}, {"qtd_desligamento", Int64.Type}}, "en-US")
+				in
+				    TiposAlterados
+

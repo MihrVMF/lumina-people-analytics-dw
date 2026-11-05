@@ -1,0 +1,202 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 165,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1380.3952127805792,
+            "y": 478.273503102949
+          },
+          "nodeIndex": "Calendario",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 468.45127661822039,
+            "y": 552.79695984272826
+          },
+          "nodeIndex": "Colaborador",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1000.8396572250235,
+            "y": 557.21030049762442
+          },
+          "nodeIndex": "Ciclo AVD",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 395.76668165986405,
+            "y": 906.54700620589813
+          },
+          "nodeIndex": "Ponto Diario",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 755.47357920192781,
+            "y": 847.38649885490076
+          },
+          "nodeIndex": "Headcount",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 108.74509088285868,
+            "y": 631.98466660016231
+          },
+          "nodeIndex": "Movimentacao",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1664.3952127805792,
+            "y": 478.273503102949
+          },
+          "nodeIndex": "Vaga",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 261.28133622538917,
+            "y": 227.1814242526948
+          },
+          "nodeIndex": "Ocorrencia",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": -50
+          },
+          "nodeIndex": "Tipo Ocorrencia",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 854.40368899898647,
+            "y": 228.16467149817822
+          },
+          "nodeIndex": "Avaliacao",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1948.3952127805792,
+            "y": 478.273503102949
+          },
+          "nodeIndex": "Meta Indicador",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2182.3952127805792,
+            "y": 478.273503102949
+          },
+          "nodeIndex": "_Medidas",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2466.3952127805792,
+            "y": 528.273503102949
+          },
+          "nodeIndex": "Avaliador",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2750.3952127805792,
+            "y": 552.273503102949
+          },
+          "nodeIndex": "Comparar com",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3034.3952127805792,
+            "y": 564.273503102949
+          },
+          "nodeIndex": "Eixo Mes",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 60,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

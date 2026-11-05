@@ -1,0 +1,5 @@
+# Arquivos temporarios do Power BI / Sistema
+*.pbit
+~$*
+.DS_Store
+Thumbs.db

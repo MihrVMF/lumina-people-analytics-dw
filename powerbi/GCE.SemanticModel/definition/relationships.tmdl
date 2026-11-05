@@ -1,0 +1,58 @@
+relationship rel_ponto_calendario
+	fromColumn: 'Ponto Diario'.data
+	toColumn: Calendario.data
+
+relationship rel_headcount_calendario
+	fromColumn: Headcount.mes_ref
+	toColumn: Calendario.data
+
+relationship rel_movimentacao_calendario
+	fromColumn: Movimentacao.data_movimentacao
+	toColumn: Calendario.data
+
+relationship rel_ocorrencia_calendario
+	fromColumn: Ocorrencia.data_ocorrencia
+	toColumn: Calendario.data
+
+relationship rel_vaga_fechamento_calendario
+	isActive: false
+	fromColumn: Vaga.data_fechamento
+	toColumn: Calendario.data
+
+relationship rel_vaga_abertura_calendario
+	isActive: false
+	fromColumn: Vaga.data_abertura
+	toColumn: Calendario.data
+
+relationship rel_ponto_colaborador
+	fromColumn: 'Ponto Diario'.colaborador_key
+	toColumn: Colaborador.colaborador_key
+
+relationship rel_headcount_colaborador
+	fromColumn: Headcount.colaborador_key
+	toColumn: Colaborador.colaborador_key
+
+relationship rel_movimentacao_colaborador
+	fromColumn: Movimentacao.colaborador_key
+	toColumn: Colaborador.colaborador_key
+
+relationship rel_ocorrencia_colaborador_mes
+	fromColumn: Ocorrencia.colaborador_key_mes
+	toColumn: Colaborador.colaborador_key
+
+relationship rel_avaliacao_colaborador
+	fromColumn: Avaliacao.colaborador_key
+	toColumn: Colaborador.colaborador_key
+
+relationship rel_avaliacao_avaliador
+	fromColumn: Avaliacao.gestor_key
+	toColumn: Avaliador.colaborador_key
+
+relationship rel_avaliacao_ciclo
+	fromColumn: Avaliacao.ciclo_key
+	toColumn: 'Ciclo AVD'.ciclo_key
+
+relationship rel_ocorrencia_tipo
+	fromColumn: Ocorrencia.tipo_ocorrencia_key
+	toColumn: 'Tipo Ocorrencia'.tipo_ocorrencia_key
+

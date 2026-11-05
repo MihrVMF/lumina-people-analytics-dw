@@ -1,0 +1,56 @@
+﻿vaga_id,data_abertura,data_fechamento,data_prazo,data_cancelamento,titulo,cargo,publicacao,tipo_vaga,status,situacao,sla_dias,dias_em_aberto,fechada_no_prazo,qtd_posicoes,qtd_posicoes_ocupadas,qtd_aberta,qtd_fechada,qtd_cancelada,cidade,uf
+5001,2025-12-13,2026-01-06,2026-01-07,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,24,,1,1,1,0,1,0,São Paulo,SP
+5002,2025-12-25,2026-01-10,2026-01-19,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,16,,1,1,1,0,1,0,São Paulo,SP
+5003,2025-12-24,2026-01-14,2026-01-18,,Vaga - Consultor Comercial Externo,Consultor Comercial Externo,Pública,Operacional,concluido,Fechada,21,,1,1,1,0,1,0,São Paulo,SP
+5004,2025-12-30,2026-01-18,2026-01-24,,Vaga - Auxiliar de Manutenção de Rede,Auxiliar de Manutenção de Rede,Pública,Técnico,concluido,Fechada,19,,1,1,1,0,1,0,São Paulo,SP
+5005,2026-01-11,2026-02-06,2026-02-05,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,26,,0,1,1,0,1,0,São Paulo,SP
+5006,2026-01-12,2026-02-10,2026-02-06,,Vaga - Técnico de Redes e Infraestrutura,Técnico de Redes e Infraestrutura,Pública,Técnico,concluido,Fechada,29,,0,1,1,0,1,0,São Paulo,SP
+5007,2026-01-27,2026-02-14,2026-02-21,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,18,,1,1,1,0,1,0,São Paulo,SP
+5008,2026-01-27,2026-02-18,2026-02-21,,Vaga - Analista Financeiro e Administrativo,Analista Financeiro e Administrativo,Pública,Administrativo,concluido,Fechada,22,,1,1,1,0,1,0,São Paulo,SP
+5009,2026-02-06,2026-03-06,2026-03-03,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,28,,0,1,1,0,1,0,São Paulo,SP
+5010,2026-02-05,2026-03-10,2026-03-02,,Vaga - Analista de Rede NOC Pleno,Analista de Rede NOC Pleno,Pública,Técnico,concluido,Fechada,33,,0,1,1,0,1,0,São Paulo,SP
+5011,2026-02-23,2026-03-14,2026-03-20,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,19,,1,1,1,0,1,0,São Paulo,SP
+5012,2026-02-26,2026-03-18,2026-03-23,,Vaga - Consultor de Retenção e Fidelização,Consultor de Retenção e Fidelização,Pública,Operacional,concluido,Fechada,20,,1,1,1,0,1,0,São Paulo,SP
+5013,2026-02-12,2026-03-22,2026-03-09,,Vaga - Supervisor de Manutenção e Redes,Supervisor de Manutenção e Redes,Pública,Liderança,concluido,Fechada,38,,0,1,1,0,1,0,São Paulo,SP
+5014,2026-03-06,2026-04-06,2026-03-31,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,31,,0,1,1,0,1,0,São Paulo,SP
+5015,2026-03-07,2026-04-10,2026-04-01,,Vaga - Técnico de Redes e Infraestrutura,Técnico de Redes e Infraestrutura,Pública,Técnico,concluido,Fechada,34,,0,1,1,0,1,0,São Paulo,SP
+5016,2026-03-24,2026-04-14,2026-04-18,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,21,,1,1,1,0,1,0,São Paulo,SP
+5017,2026-03-26,2026-04-18,2026-04-20,,Vaga - Consultor Comercial Externo,Consultor Comercial Externo,Pública,Operacional,concluido,Fechada,23,,1,1,1,0,1,0,São Paulo,SP
+5018,2026-03-17,2026-04-22,2026-04-11,,Vaga - Desenvolvedor Full Stack Pleno,Desenvolvedor Full Stack Pleno,Pública,Técnico,concluido,Fechada,36,,0,1,1,0,1,0,São Paulo,SP
+5019,2026-04-07,2026-05-06,2026-05-02,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,29,,0,1,1,0,1,0,São Paulo,SP
+5020,2026-04-18,2026-05-10,2026-05-13,,Vaga - Auxiliar de Manutenção de Rede,Auxiliar de Manutenção de Rede,Pública,Técnico,concluido,Fechada,22,,1,1,1,0,1,0,São Paulo,SP
+5021,2026-04-27,2026-05-14,2026-05-22,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,17,,1,1,1,0,1,0,São Paulo,SP
+5022,2026-04-29,2026-05-18,2026-05-24,,Vaga - Consultor de Retenção e Fidelização,Consultor de Retenção e Fidelização,Pública,Operacional,concluido,Fechada,19,,1,1,1,0,1,0,São Paulo,SP
+5023,2026-04-28,2026-05-22,2026-05-23,,Vaga - Analista de RH e Gestão de Pessoas,Analista de RH e Gestão de Pessoas,Pública,Administrativo,concluido,Fechada,24,,1,1,1,0,1,0,São Paulo,SP
+5024,2026-05-10,2026-06-06,2026-06-04,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,27,,0,1,1,0,1,0,São Paulo,SP
+5025,2026-05-11,2026-06-10,2026-06-05,,Vaga - Técnico de Redes e Infraestrutura,Técnico de Redes e Infraestrutura,Pública,Técnico,concluido,Fechada,30,,0,1,1,0,1,0,São Paulo,SP
+5026,2026-05-27,2026-06-14,2026-06-21,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,18,,1,1,1,0,1,0,São Paulo,SP
+5027,2026-05-24,2026-06-18,2026-06-18,,Vaga - Executivo de Contas B2B,Executivo de Contas B2B,Pública,Operacional,concluido,Fechada,25,,1,1,1,0,1,0,São Paulo,SP
+5028,2026-06-11,2026-07-06,2026-07-06,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,25,,1,1,1,0,1,0,São Paulo,SP
+5029,2026-06-12,2026-07-10,2026-07-07,,Vaga - Analista de Rede NOC Pleno,Analista de Rede NOC Pleno,Pública,Técnico,concluido,Fechada,28,,0,1,1,0,1,0,São Paulo,SP
+5030,2026-06-28,2026-07-14,2026-07-23,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,16,,1,1,1,0,1,0,São Paulo,SP
+5031,2026-06-28,2026-07-18,2026-07-23,,Vaga - Consultor Comercial Externo,Consultor Comercial Externo,Pública,Operacional,concluido,Fechada,20,,1,1,1,0,1,0,São Paulo,SP
+5032,2026-06-18,2026-07-22,2026-07-13,,Vaga - Supervisor de Relacionamento e Retenção,Supervisor de Relacionamento e Retenção,Pública,Liderança,concluido,Fechada,34,,0,1,1,0,1,0,São Paulo,SP
+5033,2026-07-13,2026-08-06,2026-08-07,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,24,,1,1,1,0,1,0,São Paulo,SP
+5034,2026-07-10,2026-08-10,2026-08-04,,Vaga - Desenvolvedor Full Stack Pleno,Desenvolvedor Full Stack Pleno,Pública,Técnico,concluido,Fechada,31,,0,1,1,0,1,0,São Paulo,SP
+5035,2026-07-28,2026-08-14,2026-08-22,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,17,,1,1,1,0,1,0,São Paulo,SP
+5036,2026-07-30,2026-08-18,2026-08-24,,Vaga - Consultor de Retenção e Fidelização,Consultor de Retenção e Fidelização,Pública,Operacional,concluido,Fechada,19,,1,1,1,0,1,0,São Paulo,SP
+5037,2026-08-01,2026-08-22,2026-08-26,,Vaga - Assistente de Almoxarifado e Frota,Assistente de Almoxarifado e Frota,Pública,Administrativo,concluido,Fechada,21,,1,1,1,0,1,0,São Paulo,SP
+5038,2026-08-11,2026-09-06,2026-09-05,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,26,,0,1,1,0,1,0,São Paulo,SP
+5039,2026-08-09,2026-09-10,2026-09-03,,Vaga - Técnico de Redes e Infraestrutura,Técnico de Redes e Infraestrutura,Pública,Técnico,concluido,Fechada,32,,0,1,1,0,1,0,São Paulo,SP
+5040,2026-08-27,2026-09-14,2026-09-21,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,18,,1,1,1,0,1,0,São Paulo,SP
+5041,2026-08-27,2026-09-18,2026-09-21,,Vaga - Consultor Comercial Externo,Consultor Comercial Externo,Pública,Operacional,concluido,Fechada,22,,1,1,1,0,1,0,São Paulo,SP
+5042,2026-08-16,2026-09-22,2026-09-10,,Vaga - Coordenador de Operações de Campo,Coordenador de Operações de Campo,Pública,Liderança,concluido,Fechada,37,,0,1,1,0,1,0,São Paulo,SP
+5043,2026-09-08,2026-10-06,2026-10-03,,Vaga - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,concluido,Fechada,28,,0,1,1,0,1,0,São Paulo,SP
+5044,2026-09-06,2026-10-10,2026-10-01,,Vaga - Analista de Rede NOC Pleno,Analista de Rede NOC Pleno,Pública,Técnico,concluido,Fechada,34,,0,1,1,0,1,0,São Paulo,SP
+5045,2026-09-09,2026-10-14,2026-10-04,,Vaga - Desenvolvedor Full Stack Pleno,Desenvolvedor Full Stack Pleno,Pública,Técnico,concluido,Fechada,35,,0,1,1,0,1,0,São Paulo,SP
+5046,2026-10-02,2026-10-18,2026-10-27,,Vaga - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,concluido,Fechada,16,,1,1,1,0,1,0,São Paulo,SP
+5047,2026-10-04,2026-10-22,2026-10-29,,Vaga - Consultor de Retenção e Fidelização,Consultor de Retenção e Fidelização,Pública,Operacional,concluido,Fechada,18,,1,1,1,0,1,0,São Paulo,SP
+5048,2026-10-01,2026-10-26,2026-10-26,,Vaga - Analista Financeiro e Administrativo,Analista Financeiro e Administrativo,Pública,Administrativo,concluido,Fechada,25,,1,1,1,0,1,0,São Paulo,SP
+5049,2026-09-18,,2026-10-13,,Expansão / Reposição - Técnico Instalador de Fibra Óptica,Técnico Instalador de Fibra Óptica,Pública,Técnico,em_andamento,Aberta,,43,,2,0,1,0,0,São Paulo,SP
+5050,2026-09-24,,2026-10-19,,Expansão / Reposição - Desenvolvedor Full Stack Pleno,Desenvolvedor Full Stack Pleno,Pública,Técnico,em_andamento,Aberta,,37,,2,0,1,0,0,São Paulo,SP
+5051,2026-09-29,,2026-10-24,,Expansão / Reposição - Supervisor de Manutenção e Redes,Supervisor de Manutenção e Redes,Pública,Liderança,em_andamento,Aberta,,32,,2,0,1,0,0,São Paulo,SP
+5052,2026-10-10,,2026-11-04,,Expansão / Reposição - Técnico de Redes e Infraestrutura,Técnico de Redes e Infraestrutura,Pública,Técnico,em_andamento,Aberta,,21,,2,0,1,0,0,São Paulo,SP
+5053,2026-10-14,,2026-11-08,,Expansão / Reposição - Atendente de Suporte e CX,Atendente de Suporte e CX,Pública,Operacional,em_andamento,Aberta,,17,,2,0,1,0,0,São Paulo,SP
+5054,2026-10-19,,2026-11-13,,Expansão / Reposição - Consultor Comercial Externo,Consultor Comercial Externo,Pública,Operacional,em_andamento,Aberta,,12,,2,0,1,0,0,São Paulo,SP
+5055,2026-10-23,,2026-11-17,,Expansão / Reposição - Analista de RH e Gestão de Pessoas,Analista de RH e Gestão de Pessoas,Pública,Administrativo,em_andamento,Aberta,,8,,2,0,1,0,0,São Paulo,SP

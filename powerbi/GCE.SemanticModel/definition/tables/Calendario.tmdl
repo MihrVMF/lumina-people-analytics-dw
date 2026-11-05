@@ -1,0 +1,178 @@
+﻿/// Tabela de datas (dim_calendario). Recriada por script para ficar marcada como tabela de datas.
+table Calendario
+	lineageTag: 2fb639e7-d5c0-4a66-9fe8-133852c4ccbf
+	dataCategory: Time
+
+	column data
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: 03b6dfc5-b689-48c2-af2e-a53015fe4d39
+		summarizeBy: none
+		sourceColumn: data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 65f5218d-042d-4f0a-98cd-cdf9dfa040aa
+		summarizeBy: none
+		sourceColumn: ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: f9e4c9a4-d92a-4b42-8391-c70a35179dcf
+		summarizeBy: none
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_ref
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d477e6e2-77e7-4148-bc4d-c7ae573f385d
+		summarizeBy: none
+		sourceColumn: mes_ref
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ano_mes
+		dataType: string
+		isHidden
+		lineageTag: 21c8654e-9053-4985-9638-489f9f7970c9
+		summarizeBy: none
+		sourceColumn: ano_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_nome
+		dataType: string
+		lineageTag: 365cbb9c-35d5-4239-99cc-5d9a28288039
+		summarizeBy: none
+		sourceColumn: mes_nome
+		sortByColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_ano_abrev
+		dataType: string
+		isHidden
+		lineageTag: 6482067b-2a4a-41ef-8373-1bbfd738db04
+		summarizeBy: none
+		sourceColumn: mes_ano_abrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: e5210aaa-7190-43f8-88d8-f5cfcc3e1507
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column ano_trimestre
+		dataType: string
+		lineageTag: 060496e1-a716-452c-8b56-b83bc464a76f
+		summarizeBy: none
+		sourceColumn: ano_trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana_iso
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d4190885-a690-476a-9a4f-78692431d0d0
+		summarizeBy: none
+		sourceColumn: dia_semana_iso
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana_nome
+		dataType: string
+		lineageTag: 92650fe9-c6d5-43b0-bacf-34c4a4c44089
+		summarizeBy: none
+		sourceColumn: dia_semana_nome
+		sortByColumn: dia_semana_iso
+
+		annotation SummarizationSetBy = Automatic
+
+	column fim_de_semana
+		dataType: string
+		lineageTag: 90974142-4322-442a-81e3-f853eab26b22
+		summarizeBy: none
+		sourceColumn: fim_de_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column feriado
+		dataType: string
+		lineageTag: 822c4df3-9477-4217-9b20-240244c96adb
+		summarizeBy: none
+		sourceColumn: feriado
+
+		annotation SummarizationSetBy = Automatic
+
+	column feriado_nome
+		dataType: string
+		lineageTag: 00edcbae-2456-45e2-bbb6-da49dabbf488
+		summarizeBy: none
+		sourceColumn: feriado_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_util
+		dataType: string
+		lineageTag: 8dd551d0-0414-4472-8cc6-bc9a503512e9
+		summarizeBy: none
+		sourceColumn: dia_util
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_atual
+		dataType: string
+		isHidden
+		lineageTag: cfda1392-f0ae-4e78-964d-8494a97bce2d
+		summarizeBy: none
+		sourceColumn: mes_atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column ate_hoje
+		dataType: string
+		isHidden
+		lineageTag: a42b73ea-072e-4efd-8e89-42c71519ceda
+		summarizeBy: none
+		sourceColumn: ate_hoje
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Rótulo do mês igual ao do web app: "Set/2026" (antes: split_part no SQL).
+	column mes_rotulo =
+			VAR _abrev = LEFT ( Calendario[mes_ano_abrev], SEARCH ( "/", Calendario[mes_ano_abrev] ) - 1 )   // "Set/26" -> "Set"
+			RETURN
+			    _abrev & "/" & Calendario[ano]
+		lineageTag: 2707144e-043f-4ee3-9637-3f05041bf3ce
+		summarizeBy: none
+		sortByColumn: mes_ref
+
+	partition Calendario = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_dim_calendario.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"data", type date}, {"ano", Int64.Type}, {"mes", Int64.Type}, {"mes_ref", type date}, {"ano_mes", type text}, {"mes_nome", type text}, {"mes_ano_abrev", type text}, {"trimestre", Int64.Type}, {"ano_trimestre", type text}, {"dia_semana_iso", Int64.Type}, {"dia_semana_nome", type text}, {"fim_de_semana", type text}, {"feriado", type text}, {"feriado_nome", type text}, {"dia_util", type text}, {"mes_atual", type text}, {"ate_hoje", type text}}, "en-US")
+				in
+				    TiposAlterados
+

@@ -1,0 +1,259 @@
+﻿table Colaborador
+	lineageTag: 2c704d12-cf39-47bf-a376-95dc9ef8b44c
+
+	column colaborador_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3626eaac-3d87-4ac4-b71c-a349b7f21070
+		summarizeBy: none
+		sourceColumn: colaborador_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 4156afe6-2f54-45e5-a820-b0380cec90da
+		summarizeBy: sum
+		sourceColumn: colaborador_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column funcionario_id_ponto
+		dataType: int64
+		formatString: 0
+		lineageTag: d10bbb6b-935b-4384-87d0-a0b7b5a627b2
+		summarizeBy: sum
+		sourceColumn: funcionario_id_ponto
+
+		annotation SummarizationSetBy = Automatic
+
+	column colaborador_id_gestao
+		dataType: int64
+		formatString: 0
+		lineageTag: b604dd84-f016-42f2-be4f-5056276504d0
+		summarizeBy: sum
+		sourceColumn: colaborador_id_gestao
+
+		annotation SummarizationSetBy = Automatic
+
+	column versao
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d5c84df-e035-4e1b-9099-1c31a428f38d
+		summarizeBy: sum
+		sourceColumn: versao
+
+		annotation SummarizationSetBy = Automatic
+
+	column valido_de
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 54bc8db2-e05a-4bef-803c-4f6874c12a49
+		summarizeBy: none
+		sourceColumn: valido_de
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column valido_ate
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: aede11f4-3cd6-452e-b57e-fdd690f1d189
+		summarizeBy: none
+		sourceColumn: valido_ate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column atual
+		dataType: string
+		lineageTag: 710eb0fa-f20a-43d3-83e3-b05d16e624a3
+		summarizeBy: none
+		sourceColumn: atual
+
+		annotation SummarizationSetBy = Automatic
+
+	column fonte_versao
+		dataType: string
+		lineageTag: e57debe4-297b-45a3-aacd-821f476dce84
+		summarizeBy: none
+		sourceColumn: fonte_versao
+
+		annotation SummarizationSetBy = Automatic
+
+	column origem
+		dataType: string
+		lineageTag: 037b5873-f2aa-4519-82de-4aad0faf2d19
+		summarizeBy: none
+		sourceColumn: origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: b864047b-25ce-494b-b1b0-cce857d06795
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa
+		dataType: string
+		lineageTag: 43441a32-8c53-4fc3-99cd-facd21b1f4f8
+		summarizeBy: none
+		sourceColumn: empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: 5b9ecb9b-daee-4ef1-b23b-1372e2aa7e33
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column area_fonte
+		dataType: string
+		lineageTag: 7da2f30d-29ee-40b7-abb6-b0fa0fb541c1
+		summarizeBy: none
+		sourceColumn: area_fonte
+
+		annotation SummarizationSetBy = Automatic
+
+	column setor
+		dataType: string
+		lineageTag: b98c836c-0a7a-4fe0-9abc-a7f407c66a81
+		summarizeBy: none
+		sourceColumn: setor
+
+		annotation SummarizationSetBy = Automatic
+
+	column cargo
+		dataType: string
+		lineageTag: ee72a98d-6c43-4689-9c2e-ed79ff441c52
+		summarizeBy: none
+		sourceColumn: cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: c9d76616-b00f-4155-96b0-79163acaee22
+		summarizeBy: sum
+		sourceColumn: gestor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_nome
+		dataType: string
+		lineageTag: 306277ce-ea43-46b0-8def-f0fda6996331
+		summarizeBy: none
+		sourceColumn: gestor_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestor_fonte
+		dataType: string
+		lineageTag: 66bb5749-aa0c-4a0c-a502-ef26f50512ef
+		summarizeBy: none
+		sourceColumn: gestor_fonte
+
+		annotation SummarizationSetBy = Automatic
+
+	column situacao
+		dataType: string
+		lineageTag: 014178b8-cb98-48a7-8a06-566c13979e92
+		summarizeBy: none
+		sourceColumn: situacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_admissao
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 12f7cbc4-3d8a-4b28-9265-90e9f2b31b8a
+		summarizeBy: none
+		sourceColumn: data_admissao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_demissao
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 4700ad84-fa72-4a24-8172-75eec7d0719d
+		summarizeBy: none
+		sourceColumn: data_demissao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column motivo_demissao
+		dataType: string
+		lineageTag: 130de42b-08cc-4133-a755-37157ba4df1c
+		summarizeBy: none
+		sourceColumn: motivo_demissao
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo_demissao_codigo
+		dataType: string
+		lineageTag: c541940f-6110-4229-a969-aa47e6180804
+		summarizeBy: none
+		sourceColumn: motivo_demissao_codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_desligamento
+		dataType: string
+		lineageTag: 467214b6-4c03-4beb-9718-7a224cb7e7cf
+		summarizeBy: none
+		sourceColumn: tipo_desligamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column registra_ponto
+		dataType: string
+		lineageTag: 9c828fc7-acb8-4626-895a-a6d0fc21fa83
+		summarizeBy: none
+		sourceColumn: registra_ponto
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Gestor da versão do colaborador, com "Sem gestor" no lugar do vazio (o SQL antigo fazia COALESCE). É o campo do slicer Gestor e da hierarquia.
+	column gestor = COALESCE ( Colaborador[gestor_nome], "Sem gestor" )
+		lineageTag: de14a390-ed7a-4e60-bd5b-c9588177c039
+		summarizeBy: none
+
+	hierarchy 'Área > Gestor > Colaborador'
+		lineageTag: 668cba4f-bc65-4052-b106-35d22bafb3af
+
+		level Área
+			lineageTag: ae194b79-d69f-4eef-822d-5787e8b13825
+			column: area
+
+		level Gestor
+			lineageTag: 2ccfcff6-51d4-43e5-ab69-e2ca8948be57
+			column: gestor
+
+		level Colaborador
+			lineageTag: 3c329d1a-1aaa-48e9-9f73-6ed6ef2c1d62
+			column: nome
+
+	partition Colaborador = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\lumina\dados_pbi\pbi_dim_colaborador.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    CabecalhosPromovidos = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    TiposAlterados = Table.TransformColumnTypes(CabecalhosPromovidos, {{"colaborador_key", Int64.Type}, {"colaborador_id", Int64.Type}, {"funcionario_id_ponto", Int64.Type}, {"colaborador_id_gestao", Int64.Type}, {"versao", Int64.Type}, {"valido_de", type date}, {"valido_ate", type date}, {"atual", type text}, {"fonte_versao", type text}, {"origem", type text}, {"nome", type text}, {"empresa", type text}, {"area", type text}, {"area_fonte", type text}, {"setor", type text}, {"cargo", type text}, {"gestor_id", Int64.Type}, {"gestor_nome", type text}, {"gestor_fonte", type text}, {"situacao", type text}, {"data_admissao", type date}, {"data_demissao", type date}, {"motivo_demissao", type text}, {"motivo_demissao_codigo", type text}, {"tipo_desligamento", type text}, {"registra_ponto", type text}}, "en-US")
+				in
+				    TiposAlterados
+

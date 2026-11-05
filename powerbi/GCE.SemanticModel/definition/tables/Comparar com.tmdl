@@ -1,0 +1,48 @@
+/// Slicer "Comparar com" do web app. Padrão (nada selecionado) = Mês anterior. Usa Calendario[mes_rotulo]: crie essa coluna antes.
+table 'Comparar com'
+	lineageTag: 6b8333ec-9741-4e13-afcb-a11eb30e1d31
+
+	column mes_ref
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 95fd5200-f887-4381-beef-749b94d0790b
+		summarizeBy: none
+		sourceColumn: [mes_ref]
+
+	column 'Comparar com'
+		dataType: string
+		lineageTag: 9be8f209-21d9-4081-87b7-f410d8a6f21d
+		summarizeBy: none
+		sourceColumn: [Comparar com]
+		sortByColumn: Ordem
+
+	column Ordem
+		dataType: int64
+		isHidden
+		lineageTag: 7873848d-7e3e-411b-905e-d50432bdadd7
+		summarizeBy: none
+		sourceColumn: [Ordem]
+
+	partition 'Comparar com' = calculated
+		source =
+				VAR _Meses =
+				    CALCULATETABLE (
+				        SUMMARIZE ( Calendario, Calendario[mes_ref], Calendario[mes_rotulo] ),
+				        Calendario[data] >= DATE ( 2026, 1, 1 ),
+				        Calendario[ate_hoje] = "1"
+				    )
+				VAR _Lista =
+				    SELECTCOLUMNS (
+				        _Meses,
+				        "mes_ref", Calendario[mes_ref],
+				        "Comparar com", Calendario[mes_rotulo],
+				        "Ordem", YEAR ( Calendario[mes_ref] ) * 100 + MONTH ( Calendario[mes_ref] )
+				    )
+				RETURN
+				    UNION (
+				        _Lista,
+				        ROW ( "mes_ref", BLANK (), "Comparar com", "Mês anterior", "Ordem", 1 ),
+				        ROW ( "mes_ref", BLANK (), "Comparar com", "Sem comparação", "Ordem", 2 )
+				    )
+
