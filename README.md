@@ -1,12 +1,12 @@
 # People Analytics · Grupo Lumina Telecom & Cloud
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white) ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![DAX](https://img.shields.io/badge/DAX-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![SQL](https://img.shields.io/badge/SQL-Data_Warehouse-316192?style=for-the-badge) ![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white) ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![DAX](https://img.shields.io/badge/DAX-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![SQL](https://img.shields.io/badge/SQL-Data_Warehouse-316192?style=for-the-badge) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 Painel de People Analytics desenvolvido para o **Grupo Lumina (Telecom & Cloud)**, focado em centralizar indicadores de RH que antes ficavam espalhados entre planilhas e relatórios manuais de ponto.
 
 O painel acompanha dados de jornada, banco de horas, absenteísmo, turnover, recrutamento e seleção (SLA de vagas), ocorrências disciplinares e ciclos de avaliação de desempenho (AVD). A base analisada consolida o fechamento de **outubro de 2026**, cobrindo 187 colaboradores ativos distribuídos em 3 empresas e 6 departamentos.
 
-* **Painel Online (Netlify):** [case-rh-grupo-lumina.netlify.app](https://case-rh-grupo-lumina.netlify.app)
+* **Painel Online (Web App):** [case-rh-lumina.web.app](https://case-rh-lumina.web.app)
 * **Apresentação Executiva (PDF):** [docs/Apresentacao_Executiva_Case_RH_Lumina.pdf](docs/Apresentacao_Executiva_Case_RH_Lumina.pdf)
 * **Arquivo Power BI (.pbix):** [powerbi/Lumina RH Case.pbix](powerbi/Lumina%20RH%20Case.pbix)
 
@@ -87,12 +87,12 @@ Para assegurar a confiabilidade dos números apresentados à diretoria, cruzei o
 * **Banco de Dados:** PostgreSQL (criação de schemas, views analíticas e rotinas de carga).
 * **Linguagens:** SQL para tratamento e transformação dos dados; DAX para cálculos de métricas e inteligência temporal no Power BI.
 * **Visualização:** Power BI Desktop (versões `.pbix` e `.pbip` com modelo em TMDL).
-* **Hospedagem Web:** Netlify para publicação da versão interativa online.
+* **Hospedagem Web:** Firebase Hosting (`.web.app`) para publicação da versão interativa online.
 
 ## Como visualizar ou executar o projeto
 
 1. **Visualização direta (sem instalar nada):**
-   * Acesse o link público: [case-rh-grupo-lumina.netlify.app](https://case-rh-grupo-lumina.netlify.app)
+   * Acesse o link público: [case-rh-lumina.web.app](https://case-rh-lumina.web.app)
    * Ou consulte o relatório executivo em PDF: [docs/Apresentacao_Executiva_Case_RH_Lumina.pdf](docs/Apresentacao_Executiva_Case_RH_Lumina.pdf)
 
 2. **Abrir o painel no Power BI:**
